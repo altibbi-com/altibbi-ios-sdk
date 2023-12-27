@@ -28,7 +28,7 @@ React native SDK provides integration for the Altibbi services, including video 
   s.source           = { :git => 'https://github.com/altibbi-com/altibbi-ios-sdk.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '13.0'
+  s.ios.deployment_target = '14.0'
 
   s.source_files = 'AltibbiTelehealth/Classes/**/*'
 
