@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'AltibbiTelehealth'
   s.version          = '0.1.0'
-  s.summary          = 'React native SDK provides integration for the Altibbi services, including video consultation, text consultation, push Welcome to the React Native SDK for Altibbi services, your comprehensive solution for integrating health consultation services into your React Native applications. This SDK enables video and text consultations, push notifications, and many other features to provide a seamless healthcare experience.'
+  s.summary          = 'React native SDK provides integration for the Altibbi services.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
