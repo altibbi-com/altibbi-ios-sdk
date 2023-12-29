@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Wiz-dF-pVI">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Wiz-dF-pVI">
     <device id="retina6_72" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -27,13 +27,13 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="shtayyat" borderStyle="roundedRect" placeholder="Insert Token" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CeL-LX-AOB">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="joher" borderStyle="roundedRect" placeholder="Insert Token" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CeL-LX-AOB">
                                 <rect key="frame" x="20" y="207" width="390" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qxc-5P-hDK">
-                                <rect key="frame" x="60" y="341" width="310" height="38.333333333333314"/>
+                                <rect key="frame" x="60" y="341" width="310" height="34.333333333333314"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Start">
                                     <backgroundConfiguration key="background" cornerRadius="20"/>
@@ -43,7 +43,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ML-Nd-YdK">
-                                <rect key="frame" x="20" y="439.33333333333331" width="390" height="0.0"/>
+                                <rect key="frame" x="20" y="435.33333333333331" width="390" height="0.0"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.86703436150000002" green="0.1452601811" blue="0.043321089469999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
@@ -89,7 +89,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1hd-7T-sQo">
-                                <rect key="frame" x="20" y="183" width="390" height="38.333333333333343"/>
+                                <rect key="frame" x="20" y="183" width="390" height="34.333333333333343"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Consulations">
                                     <backgroundConfiguration key="background" cornerRadius="10"/>
@@ -99,7 +99,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M8b-LN-u0e">
-                                <rect key="frame" x="20" y="241.33333333333334" width="390" height="38.333333333333343"/>
+                                <rect key="frame" x="20" y="237.33333333333334" width="390" height="34.333333333333343"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="User and Phrs">
                                     <backgroundConfiguration key="background" cornerRadius="10"/>
@@ -150,7 +150,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="20S-gy-8dP">
-                                <rect key="frame" x="140" y="133" width="270" height="38.333333333333343"/>
+                                <rect key="frame" x="140" y="133" width="270" height="34.333333333333343"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Get User By ID"/>
                                 <connections>
@@ -158,7 +158,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yCX-5W-mDn">
-                                <rect key="frame" x="20" y="258.66666666666669" width="390" height="38.333333333333314"/>
+                                <rect key="frame" x="20" y="250.66666666666666" width="390" height="34.333333333333343"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Show Users List"/>
                                 <connections>
@@ -174,7 +174,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GPI-hJ-lXK">
-                                <rect key="frame" x="140" y="190.33333333333334" width="270" height="38.333333333333343"/>
+                                <rect key="frame" x="140" y="186.33333333333334" width="270" height="34.333333333333343"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Delete User By ID"/>
                                 <connections>
@@ -182,23 +182,23 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Update User" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aR8-Vv-APi">
-                                <rect key="frame" x="20" y="337" width="390" height="24"/>
+                                <rect key="frame" x="20" y="325" width="390" height="24"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Insert Name..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5kV-Fv-XU2">
-                                <rect key="frame" x="20" y="386" width="390" height="34"/>
+                                <rect key="frame" x="20" y="374" width="390" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Insert Email..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="shb-Qx-Fd3">
-                                <rect key="frame" x="20" y="435" width="390" height="34"/>
+                                <rect key="frame" x="20" y="423" width="390" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X3l-Ub-yO8">
-                                <rect key="frame" x="140" y="533" width="270" height="38.333333333333371"/>
+                                <rect key="frame" x="140" y="521" width="270" height="34.333333333333371"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Update"/>
                                 <connections>
@@ -206,7 +206,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="ID" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="32I-ec-0uo">
-                                <rect key="frame" x="20" y="533" width="100" height="34"/>
+                                <rect key="frame" x="20" y="521" width="100" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="pgB-rm-a2F"/>
                                 </constraints>
@@ -214,18 +214,18 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Insert Height..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CAF-8v-R52">
-                                <rect key="frame" x="20" y="484" width="390" height="34"/>
+                                <rect key="frame" x="20" y="472" width="390" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create User" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="08o-ZJ-g20">
-                                <rect key="frame" x="20" y="611.33333333333337" width="390" height="24"/>
+                                <rect key="frame" x="20" y="595.33333333333337" width="390" height="24"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7j9-jZ-3cj">
-                                <rect key="frame" x="20" y="665.33333333333337" width="390" height="38.333333333333371"/>
+                                <rect key="frame" x="20" y="649.33333333333337" width="390" height="34.333333333333371"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="tinted" title="Create">
                                     <backgroundConfiguration key="background" cornerRadius="10"/>
@@ -314,7 +314,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="rdD-Xe-cNr">
-                                <rect key="frame" x="160" y="226" width="250" height="36.333333333333314"/>
+                                <rect key="frame" x="160" y="226" width="250" height="34.333333333333314"/>
                                 <locale key="locale" localeIdentifier="en_US"/>
                                 <connections>
                                     <action selector="dateValueChanged:" destination="58R-bH-iaX" eventType="valueChanged" id="YaO-97-4JM"/>
@@ -339,7 +339,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vxa-XV-qaK">
-                                <rect key="frame" x="245.66666666666666" y="282.33333333333331" width="104.33333333333334" height="38.333333333333314"/>
+                                <rect key="frame" x="245.66666666666666" y="280.33333333333331" width="104.33333333333334" height="34.333333333333314"/>
                                 <color key="tintColor" systemColor="linkColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="circlebadge" catalog="system" title=" Female"/>
@@ -348,7 +348,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J9y-YC-kaf">
-                                <rect key="frame" x="130" y="282.33333333333331" width="85.666666666666686" height="38.333333333333314"/>
+                                <rect key="frame" x="130" y="280.33333333333331" width="85.666666666666686" height="34.333333333333314"/>
                                 <color key="tintColor" systemColor="tintColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="circlebadge" catalog="system" title=" Male"/>
@@ -387,7 +387,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AaV-Ls-G4L">
-                                <rect key="frame" x="20.000000000000007" y="632" width="111.66666666666669" height="38.333333333333371"/>
+                                <rect key="frame" x="20.000000000000007" y="632" width="111.66666666666669" height="34.333333333333371"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="square" catalog="system" title=" Smoker"/>
                                 <connections>
@@ -395,7 +395,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nzu-xG-dm8">
-                                <rect key="frame" x="247" y="632" width="123" height="38.333333333333371"/>
+                                <rect key="frame" x="247" y="632" width="123" height="34.333333333333371"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="square" catalog="system" title=" Alcoholic"/>
                                 <connections>
@@ -403,12 +403,12 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Insert Marital Status" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LVo-ib-mWB">
-                                <rect key="frame" x="20" y="690.33333333333337" width="390" height="34"/>
+                                <rect key="frame" x="20" y="686.33333333333337" width="390" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N84-eo-QQf">
-                                <rect key="frame" x="20" y="839.66666666666663" width="390" height="38.333333333333371"/>
+                                <rect key="frame" x="20" y="843.66666666666663" width="390" height="34.333333333333371"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Submit">
                                     <backgroundConfiguration key="background" cornerRadius="10"/>
@@ -704,7 +704,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="30" borderStyle="roundedRect" placeholder="Insert ID" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XIg-FI-THo">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="61" borderStyle="roundedRect" placeholder="Insert ID" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XIg-FI-THo">
                                 <rect key="frame" x="20" y="335.66666666666669" width="390" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -1154,7 +1154,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cVy-DO-LUY">
-                                <rect key="frame" x="20" y="839.66666666666663" width="390" height="38.333333333333371"/>
+                                <rect key="frame" x="20" y="843.66666666666663" width="390" height="34.333333333333371"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Cancel Consultation"/>
                                 <connections>
@@ -1162,7 +1162,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="buh-FG-eOa">
-                                <rect key="frame" x="20" y="786.33333333333337" width="390" height="38.333333333333371"/>
+                                <rect key="frame" x="20" y="794.33333333333337" width="390" height="34.333333333333371"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Consultation Info"/>
                                 <connections>
@@ -1235,12 +1235,32 @@
                                             <constraint firstItem="jfB-G8-ymr" firstAttribute="top" secondItem="wke-ir-gMt" secondAttribute="top" id="ykz-88-NPb"/>
                                         </constraints>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dr Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="deS-VB-87v">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hBY-Hx-Fai">
                                         <rect key="frame" x="80" y="0.0" width="270" height="60"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dr Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="deS-VB-87v">
+                                                <rect key="frame" x="0.0" y="15.000000000000002" width="270" height="21.666666666666671"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jgh-MH-DUJ">
+                                                <rect key="frame" x="0.0" y="45.666666666666671" width="270" height="14.333333333333336"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstItem="deS-VB-87v" firstAttribute="top" secondItem="hBY-Hx-Fai" secondAttribute="top" constant="15" id="AjN-gX-BD7"/>
+                                            <constraint firstAttribute="trailing" secondItem="deS-VB-87v" secondAttribute="trailing" id="B9h-x8-B8w"/>
+                                            <constraint firstAttribute="trailing" secondItem="Jgh-MH-DUJ" secondAttribute="trailing" id="LXX-sX-7A5"/>
+                                            <constraint firstItem="Jgh-MH-DUJ" firstAttribute="leading" secondItem="hBY-Hx-Fai" secondAttribute="leading" id="XXF-3o-hfY"/>
+                                            <constraint firstAttribute="bottom" secondItem="Jgh-MH-DUJ" secondAttribute="bottom" id="euA-qG-GHO"/>
+                                            <constraint firstItem="deS-VB-87v" firstAttribute="leading" secondItem="hBY-Hx-Fai" secondAttribute="leading" id="lbi-hV-Rcs"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="94Z-yI-zbh">
@@ -1299,9 +1319,9 @@
                                     <constraint firstItem="qOR-Kr-eQd" firstAttribute="leading" secondItem="zm5-Wc-mMr" secondAttribute="trailing" constant="1" id="xmL-fC-VqC"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="4g2-rn-27j">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="4g2-rn-27j">
                                 <rect key="frame" x="20" y="121" width="390" height="732"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <sections/>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -1332,6 +1352,7 @@
                         <outlet property="sendMsgBtn" destination="qOR-Kr-eQd" id="nnk-W2-MbI"/>
                         <outlet property="separatorView" destination="94Z-yI-zbh" id="gRz-kg-uv7"/>
                         <outlet property="tableView" destination="4g2-rn-27j" id="zSB-HU-vKx"/>
+                        <outlet property="typingLbl" destination="Jgh-MH-DUJ" id="Yz5-pp-pra"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b49-ba-Lhc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1363,7 +1384,7 @@
                         <viewControllerLayoutGuide type="bottom" id="MAg-Ec-6L8"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="7HP-gt-2df">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>

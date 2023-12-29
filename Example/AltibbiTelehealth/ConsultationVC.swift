@@ -8,7 +8,6 @@
 
 import Foundation
 import AltibbiTelehealth
-import PDFKit
 import MobileCoreServices
 
 
@@ -25,7 +24,6 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var deleteIdField: UITextField!
     @IBOutlet weak var viewIdField: UITextField!
     @IBOutlet weak var prescriptionIdField: UITextField!
-    var pdfView: PDFView!
     
     public func showAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)

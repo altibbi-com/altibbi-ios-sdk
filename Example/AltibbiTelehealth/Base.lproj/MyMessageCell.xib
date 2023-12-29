@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="100" id="fag-cM-pEd" customClass="MyMessageCell" customModule="AltibbiTelehealth_Example" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="130"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" tableViewCell="fag-cM-pEd" id="jK3-0e-2WE">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="130"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zVC-SH-JRh">
+                        <rect key="frame" x="100" y="5" width="220" height="120"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="100" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oxT-IS-W6K">
+                                <rect key="frame" x="10" y="15" width="200" height="85"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="oxT-IS-W6K" firstAttribute="leading" secondItem="zVC-SH-JRh" secondAttribute="leading" constant="10" id="3w6-Fx-rFu"/>
+                            <constraint firstAttribute="bottom" secondItem="oxT-IS-W6K" secondAttribute="bottom" constant="20" id="MdZ-JE-VNC"/>
+                            <constraint firstAttribute="trailing" secondItem="oxT-IS-W6K" secondAttribute="trailing" constant="10" id="atK-w9-NHQ"/>
+                            <constraint firstItem="oxT-IS-W6K" firstAttribute="top" secondItem="zVC-SH-JRh" secondAttribute="top" constant="15" id="dYe-IR-PhP"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="zVC-SH-JRh" firstAttribute="leading" secondItem="jK3-0e-2WE" secondAttribute="leading" constant="100" id="LdB-rW-vPv"/>
+                    <constraint firstItem="zVC-SH-JRh" firstAttribute="top" secondItem="jK3-0e-2WE" secondAttribute="top" constant="5" id="VND-hH-SqO"/>
+                    <constraint firstAttribute="bottom" secondItem="zVC-SH-JRh" secondAttribute="bottom" constant="5" id="XZQ-Nc-cww"/>
+                    <constraint firstAttribute="trailing" secondItem="zVC-SH-JRh" secondAttribute="trailing" id="b3s-kw-qR7"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="messageLabel" destination="oxT-IS-W6K" id="Nw7-LN-cee"/>
+                <outlet property="myMessageContainer" destination="zVC-SH-JRh" id="QjX-j1-Btw"/>
+            </connections>
+            <point key="canvasLocation" x="303.81679389312978" y="-21.47887323943662"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

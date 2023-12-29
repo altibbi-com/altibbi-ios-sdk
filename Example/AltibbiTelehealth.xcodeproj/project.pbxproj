@@ -16,6 +16,10 @@
 		30998BEC2B383585005E9F25 /* UserVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30998BEB2B383585005E9F25 /* UserVC.swift */; };
 		30998BEE2B3835F5005E9F25 /* UserInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30998BED2B3835F5005E9F25 /* UserInfoVC.swift */; };
 		30998BF02B383639005E9F25 /* CreateUserVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30998BEF2B383639005E9F25 /* CreateUserVC.swift */; };
+		30998BFD2B3C32F1005E9F25 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30998BFC2B3C32F1005E9F25 /* MessageCell.swift */; };
+		30998C002B3C3304005E9F25 /* MessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 30998BFE2B3C3304005E9F25 /* MessageCell.xib */; };
+		30998C022B3CB1FE005E9F25 /* MyMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30998C012B3CB1FE005E9F25 /* MyMessageCell.swift */; };
+		30998C052B3CB266005E9F25 /* MyMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 30998C032B3CB266005E9F25 /* MyMessageCell.xib */; };
 		360E56FE2F7CE90512848A66 /* Pods_AltibbiTelehealth_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91F76571CA1CE9F41A2DFD32 /* Pods_AltibbiTelehealth_Example.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
@@ -47,6 +51,10 @@
 		30998BEB2B383585005E9F25 /* UserVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVC.swift; sourceTree = "<group>"; };
 		30998BED2B3835F5005E9F25 /* UserInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoVC.swift; sourceTree = "<group>"; };
 		30998BEF2B383639005E9F25 /* CreateUserVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserVC.swift; sourceTree = "<group>"; };
+		30998BFC2B3C32F1005E9F25 /* MessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
+		30998BFF2B3C3304005E9F25 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MessageCell.xib; sourceTree = "<group>"; };
+		30998C012B3CB1FE005E9F25 /* MyMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyMessageCell.swift; sourceTree = "<group>"; };
+		30998C042B3CB266005E9F25 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MyMessageCell.xib; sourceTree = "<group>"; };
 		4E4AD0AEA5B2BB51DB4C1A9D /* Pods-AltibbiTelehealth_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AltibbiTelehealth_Example.release.xcconfig"; path = "Target Support Files/Pods-AltibbiTelehealth_Example/Pods-AltibbiTelehealth_Example.release.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* AltibbiTelehealth_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AltibbiTelehealth_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -99,6 +107,8 @@
 		30998BE12B3832A3005E9F25 /* Consultation Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				30998C012B3CB1FE005E9F25 /* MyMessageCell.swift */,
+				30998BFC2B3C32F1005E9F25 /* MessageCell.swift */,
 				30998BE22B3832FF005E9F25 /* ConsultationVC.swift */,
 				30998BE42B38338A005E9F25 /* WaitingVC.swift */,
 				30998BE62B383461005E9F25 /* PrescriptionVC.swift */,
@@ -147,6 +157,8 @@
 				30998BDA2B38319D005E9F25 /* Main Controllers */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
+				30998BFE2B3C3304005E9F25 /* MessageCell.xib */,
+				30998C032B3CB266005E9F25 /* MyMessageCell.xib */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
@@ -268,7 +280,7 @@
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = "";
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
 				};
@@ -299,7 +311,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
+				30998C002B3C3304005E9F25 /* MessageCell.xib in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
+				30998C052B3CB266005E9F25 /* MyMessageCell.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -409,11 +423,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30998C022B3CB1FE005E9F25 /* MyMessageCell.swift in Sources */,
 				30998BE72B383461005E9F25 /* PrescriptionVC.swift in Sources */,
 				30998BF02B383639005E9F25 /* CreateUserVC.swift in Sources */,
 				30998BE52B38338A005E9F25 /* WaitingVC.swift in Sources */,
 				30998BE92B3834DD005E9F25 /* ChatConsultationVC.swift in Sources */,
 				30998BE02B38327A005E9F25 /* HomeVC.swift in Sources */,
+				30998BFD2B3C32F1005E9F25 /* MessageCell.swift in Sources */,
 				30998BDE2B383214005E9F25 /* LoginVC.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				30998BE32B3832FF005E9F25 /* ConsultationVC.swift in Sources */,
@@ -442,6 +458,22 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		30998BFE2B3C3304005E9F25 /* MessageCell.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				30998BFF2B3C3304005E9F25 /* Base */,
+			);
+			name = MessageCell.xib;
+			sourceTree = "<group>";
+		};
+		30998C032B3CB266005E9F25 /* MyMessageCell.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				30998C042B3CB266005E9F25 /* Base */,
+			);
+			name = MyMessageCell.xib;
+			sourceTree = "<group>";
+		};
 		607FACD91AFB9204008FA782 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -610,7 +642,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AltibbiTelehealth_Example.app/AltibbiTelehealth_Example";
 			};
 			name = Debug;
@@ -629,7 +661,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AltibbiTelehealth_Example.app/AltibbiTelehealth_Example";
 			};
 			name = Release;

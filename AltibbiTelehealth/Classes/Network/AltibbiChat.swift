@@ -15,7 +15,6 @@ public class AltibbiChat {
     public static func initialize(config: ChatConfig) {
         let initParams = InitParams(
             applicationId: config.appId!,
-            isLocalCachingEnabled: true,
             logLevel: .info
         )
         

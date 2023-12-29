@@ -16,7 +16,7 @@ class WaitingVC: UIViewController {
     @IBOutlet weak var idValueLbl: UILabel!
     @IBOutlet weak var progressLLbl: UILabel!
     @IBOutlet weak var consultationInfoBtn: UIButton!
-    
+
     func onEvent(name: String, data: String?) {
         if let data = data {
             print("Event onEvent >>>>>>>>>> \(name) : \(data)")
@@ -49,7 +49,7 @@ class WaitingVC: UIViewController {
             }
         }
     }
-    
+
     func openConsultationScreen() {
         ApiService.getConsultationInfo(id: (consultationInfo?.consultationId)!, completion: {consultation, failure, error in
             if let error = error {
@@ -71,10 +71,10 @@ class WaitingVC: UIViewController {
             }
         })
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         if let info = consultationInfo {
             DispatchQueue.main.async {
                 if info.consultationId != nil {
@@ -95,7 +95,7 @@ class WaitingVC: UIViewController {
                         channelName: channelName,
                         onEvent: onEvent
                     )
-                    
+
                 }
             }
         }
@@ -152,7 +152,7 @@ class WaitingVC: UIViewController {
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "chatScreenSegue" {
             if let destVc = segue.destination as? ChatConsultationVC {

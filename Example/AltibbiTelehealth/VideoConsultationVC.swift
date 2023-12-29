@@ -193,6 +193,7 @@ class VideoConsultationVC: UIViewController {
             if (consultationInfo?.medium == "video"){
                 scrollView.addSubview(pubView)
             }
+            //view.addSubview(pubView)
         }
     }
     
