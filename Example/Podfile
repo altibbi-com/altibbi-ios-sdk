@@ -1,0 +1,12 @@
+use_frameworks!
+platform :ios, '14.0'
+
+target 'AltibbiTelehealth_Example' do
+  pod 'AltibbiTelehealth', :path => '../'
+
+  target 'AltibbiTelehealth_Tests' do
+    inherit! :search_paths
+
+
+  end
+end
