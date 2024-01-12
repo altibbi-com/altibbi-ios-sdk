@@ -24,6 +24,7 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var deleteIdField: UITextField!
     @IBOutlet weak var viewIdField: UITextField!
     @IBOutlet weak var prescriptionIdField: UITextField!
+    @IBOutlet weak var listFilterField: UITextField!
     
     public func showAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -241,14 +242,21 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     @IBAction func getListClicked(_ sender: Any) {
-        ApiService.getConsultationList(page: 1, perPage: 20, completion: {list, failure, error in
+        var filterId: Int? = nil
+        if let id = self.listFilterField.text, id.count > 0, let intId = Int(id) {
+            filterId = intId
+        }
+        ApiService.getConsultationList(userId: filterId, page: 1, perPage: 20, completion: {list, failure, error in
             if let error = error {
                 print("Data Error: \(String(describing: error))")
             } else if let failure = failure {
                 ResponseFailure.printJsonData(failure)
             } else {
+                print("Consultation Count: \(String(describing: list?.count))")
                 if let list = list {
-                    print("Consultation List: \(String(describing: list))")
+                    for cons in list {
+                        print("Consultation ID: \(String(describing: cons.consultationId)), Question: \(String(describing: cons.question)), User ID: \(String(describing: cons.userId))")
+                    }
                 }
             }
         })

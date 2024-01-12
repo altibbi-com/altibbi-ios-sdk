@@ -12,7 +12,7 @@ public struct Recommendation: Codable {
     private(set) public var consultationId: Int?
     private(set) public var createdAt: String?
     private(set) public var updatedAt: String?
-    private(set) public var data: [RecommendationData]?
+    private(set) public var data: RecommendationData?
     
     private enum CodingKeys: String, CodingKey {
         case id = "id"
@@ -63,8 +63,8 @@ public struct RecommendationFdaDrug: Codable {
 }
 
 public struct RecommendationICD10: Codable {
-    private(set) public var symptom: RecommendationSymptom?
-    private(set) public var diagnosis: RecommendationDiagnosis?
+    private(set) public var symptom: [RecommendationSymptom]?
+    private(set) public var diagnosis: [RecommendationDiagnosis]?
 }
 
 public struct RecommendationSymptom: Codable {

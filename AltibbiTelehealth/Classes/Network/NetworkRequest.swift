@@ -15,19 +15,11 @@ struct NetworkRequest {
                 return
             }
 
-            print("httpResponse.statusCode: \(httpResponse.statusCode)")
-            print("From NetworkRequest, Print JSON Response")
             if httpResponse.statusCode >= 400 {
                 completion(nil, data, nil)
-//                do {
-//                    let apiErrors = try JSONDecoder().decode(APIErrorsArray.self, from: data)
-//                    let concatenatedMessages = apiErrors.errors.map { $0.message }.joined(separator: "\n")
-//                    completion(nil, failure)
-//                } catch {
-//                    completion(nil, "Failed to decode error response")
-//                }
             } else {
-                printJsonData(data)
+//                print("From NetworkRequest, Print JSON Response")
+//                printJsonData(data)
                 if download! {
                     let identifier = "AltibbiFile-\(UUID().uuidString)"
                     let destinationURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]

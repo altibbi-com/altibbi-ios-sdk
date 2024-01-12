@@ -32,18 +32,18 @@ public struct User: Codable {
     
     public init(
         name: String?,
-        email: String?,
-        dateOfBirth: String?,
-        gender: String?,
-        insuranceId: String?,
-        policyNumber: String?,
-        nationalityNumber: String?,
-        height: Double?,
-        weight: Double?,
-        bloodType: String?,
-        smoker: String?,
-        alcoholic: String?,
-        maritalStatus: String?
+        email: String? = nil,
+        dateOfBirth: String? = nil,
+        gender: String? = nil,
+        insuranceId: String? = nil,
+        policyNumber: String? = nil,
+        nationalityNumber: String? = nil,
+        height: Double? = nil,
+        weight: Double? = nil,
+        bloodType: String? = nil,
+        smoker: String? = nil,
+        alcoholic: String? = nil,
+        maritalStatus: String? = nil
     ) {
         self.name = name
         self.email = email
@@ -77,6 +77,7 @@ public struct User: Codable {
         case updatedAt = "updated_at"
         case avatar = "avatar"
     }
+    
     
     public func fromJSON(_ jsonData: Data) throws -> User {
         let decoder = JSONDecoder()

@@ -102,12 +102,16 @@ public struct ApiService {
         }
     }
     
-    public static func getConsultationList(page: Int, perPage: Int, completion: @escaping ([Consultation]?, Data?, Error?) -> Void) -> Void {
-        let requestParams = [
+    public static func getConsultationList(userId: Int? = nil, page: Int, perPage: Int, completion: @escaping ([Consultation]?, Data?, Error?) -> Void) -> Void {
+        var requestParams: Dictionary<String, Any> = [
             "page": String(page),
             "per-page": String(perPage),
+            "sort": "-id",
             "expand": "pusherAppKey,parentConsultation,consultations,user,media,pusherChannel,chatConfig,chatHistory,voipConfig,videoConfig,recommendation"
         ]
+        if userId != nil {
+            requestParams["filter[user_id]"] = userId
+        }
         if let httpRequest = NetworkRequest.prepareRequest(
             link: "/consultations",
             method: "GET",
