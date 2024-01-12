@@ -26,4 +26,4 @@ mahmoud-Johar, mahmoud.abojoher@altibbi.com
 
 ## License
 
-AltibbiTelehealth is available under the MIT license. See the LICENSE file for more info.
+AltibbiTelehealth is a available under the MIT license. See the LICENSE file for more info.
