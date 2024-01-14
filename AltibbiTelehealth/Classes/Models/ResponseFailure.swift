@@ -54,4 +54,11 @@ public struct APIErrorsArray: Decodable {
     }
 }
 
-
+// MARK: This code could be used to decode the error/fail response
+//    do {
+//        let apiErrors = try JSONDecoder().decode(APIErrorsArray.self, from: data)
+//        let concatenatedMessages = apiErrors.errors.map { $0.message }.joined(separator: "\n")
+//        completion(nil, failure)
+//    } catch {
+//        completion(nil, "Failed to decode error response")
+//    }
