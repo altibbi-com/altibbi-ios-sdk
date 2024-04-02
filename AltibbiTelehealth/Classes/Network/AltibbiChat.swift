@@ -4,8 +4,6 @@
 //
 //  Created by Mahmoud Johar on 24/12/2023.
 //
-// "SENDBIRD_APP_ID": "DDD1D3D0-8CDB-4057-BC7F-FEC8213C0BDB", LIVE
-// "SENDBIRD_APP_ID": "4215563D-E399-4895-ABB6-D209582A735A", DEV
 
 import Foundation
 import SendbirdChatSDK
@@ -50,11 +48,6 @@ public class AltibbiChat {
                     }
                 })
             }
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1200.0) {
-//                SendbirdChat.disconnect(completionHandler: {
-//                    print("SendbirdChat.disconnect >>> Disconnected")
-//                })
-//            }
         })
     }
 
