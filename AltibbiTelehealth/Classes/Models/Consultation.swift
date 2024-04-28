@@ -73,7 +73,7 @@ public class Consultation: Codable {
     private(set) public var chatHistory: ChatHistory?
     private(set) public var recommendation: Recommendation?
     private(set) public var media: [Media]?
-    private(set) public var doctorAverageRating: Int?
+    private(set) public var doctorAverageRating: Double?
 
 
     // MARK: This init used for creating consultations

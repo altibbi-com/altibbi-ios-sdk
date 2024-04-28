@@ -10,7 +10,7 @@ import UIKit
 import AltibbiTelehealth
 
 class CreateUserVC: UIViewController {
-       
+
     @IBOutlet weak var datePicker: UIDatePicker!
     var dateOfBirth = ""
     @IBOutlet weak var nameField: UITextField!
@@ -27,16 +27,16 @@ class CreateUserVC: UIViewController {
     var smoker = false
     var alcoholic = false
     @IBOutlet weak var maritalStatusField: UITextField!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         datePicker.maximumDate = Calendar.current.date(byAdding: .day, value: -1, to: Date())
 
-        
+
         // Do any additional setup after loading the view.
     }
-    
+
     public func showAlert(title: String, message: String, goBack: Bool = false) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (_) in
@@ -47,7 +47,7 @@ class CreateUserVC: UIViewController {
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
     }
-    
+
     @IBAction func dateValueChanged(_ sender: UIDatePicker) {
         let selectedDate = sender.date
         let dateFormatter = DateFormatter()
@@ -57,7 +57,7 @@ class CreateUserVC: UIViewController {
         dateOfBirth = formattedDate
         print("Selected Date: \(formattedDate)")
     }
-    
+
     @IBAction func genderOptionSelected(_ sender: UIButton) {
         maleGenderOption.setImage(UIImage(systemName: "circlebadge"), for: .normal)
         femaleGenderOption.setImage(UIImage(systemName: "circlebadge"), for: .normal)
@@ -96,7 +96,8 @@ class CreateUserVC: UIViewController {
         let smokeOption = smoker ? "yes" : "no"
         let alcoholOption = alcoholic ? "yes" : "no"
         let maritalStatus = maritalStatusField.text!
-        
+        let relationType = ""
+
         let newUser = User(
             name: name.count > 0 ? name : nil,
             email: email.count > 0 ? email : nil,
@@ -110,7 +111,8 @@ class CreateUserVC: UIViewController {
             bloodType: bloodType.count > 0 ? bloodType : nil,
             smoker: smokeOption,
             alcoholic: alcoholOption,
-            maritalStatus: maritalStatus.count > 0 ? maritalStatus : nil
+            maritalStatus: maritalStatus.count > 0 ? maritalStatus : nil,
+            relationType: relationType
         )
         ApiService.createUser(userData: newUser, completion: {user, failure, error in
             if let error = error {
