@@ -255,4 +255,20 @@ public struct ApiService {
         }
     }
     
+    public static func rateConsultation(id: Int,score: Int, completion: @escaping (String?, Data?, Error?) -> Void) -> Void {
+        let jsonData = try? JSONSerialization.data(withJSONObject: ["score": score], options: [])
+
+        if let httpRequest = NetworkRequest.prepareRequest(
+            link: "/consultations/\(id)/rate",
+            method: "POST",
+            params: [:],
+            jsonBody: jsonData
+        ) {
+            NetworkRequest.sendApiRequest(httpRequest, expectedType: String.self, completion: {success, failure, error in
+                completion(success, failure, error)
+            })
+        } else {
+            completion(nil, nil, nil)
+        }
+    }
 }

@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AltibbiTelehealth'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.summary          = 'React native SDK provides integration for the Altibbi services.'
   s.swift_version    = "5.0"
 
@@ -39,10 +39,10 @@ React native SDK provides integration for the Altibbi services, including video 
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'AFNetworking', '~> 4.0'
-  s.dependency 'PusherSwift', '~> 10.1.1'
+  s.dependency 'AFNetworking'
+  s.dependency 'PusherSwift'
   s.dependency 'SendbirdChatSDK'
-  s.dependency 'OTXCFramework','2.26.1'
+  s.dependency 'OTXCFramework'
   s.static_framework = true
 
 end

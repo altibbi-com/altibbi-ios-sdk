@@ -22,6 +22,7 @@ public struct User: Codable {
     public var smoker: String?
     public var alcoholic: String?
     public var maritalStatus: String?
+    public var relationType: String?
     private(set) public var createdAt: String?
     private(set) public var updatedAt: String?
     private(set) public var avatar: String?
@@ -43,7 +44,8 @@ public struct User: Codable {
         bloodType: String? = nil,
         smoker: String? = nil,
         alcoholic: String? = nil,
-        maritalStatus: String? = nil
+        maritalStatus: String? = nil,
+        relationType: String? = nil
     ) {
         self.name = name
         self.email = email
@@ -58,6 +60,7 @@ public struct User: Codable {
         self.smoker = smoker
         self.alcoholic = alcoholic
         self.maritalStatus = maritalStatus
+        self.relationType = relationType
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -76,6 +79,7 @@ public struct User: Codable {
         case createdAt = "created_at"
         case updatedAt = "updated_at"
         case avatar = "avatar"
+        case relationType = "relationType"
     }
     
     

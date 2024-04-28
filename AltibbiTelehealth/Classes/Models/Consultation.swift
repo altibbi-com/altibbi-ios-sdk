@@ -37,6 +37,17 @@ public enum GenderType: String {
     case female = "female"
 }
 
+public enum RelationType: String {
+    case PERSONAL = "personal"
+    case FATHER = "father"
+    case MOTHER = "mother"
+    case SISTER = "sister"
+    case BROTHER = "brother"
+    case CHILD = "child"
+    case HUSBAND = "husband"
+    case WIFE = "wife"
+    case OTHER = "other"
+}
 public class Consultation: Codable {
     public var userId: Int
     public var question: String
@@ -62,8 +73,9 @@ public class Consultation: Codable {
     private(set) public var chatHistory: ChatHistory?
     private(set) public var recommendation: Recommendation?
     private(set) public var media: [Media]?
-    
-    
+    private(set) public var doctorAverageRating: Int?
+
+
     // MARK: This init used for creating consultations
     public init(userId: Int, question: String, medium: String, mediaIds: [String]? = nil, parentConsultationId: Int? = nil) {
         self.userId = userId
@@ -72,7 +84,7 @@ public class Consultation: Codable {
         self.mediaIds = mediaIds
         self.parentConsultationId = parentConsultationId
     }
-    
+
     private enum CodingKeys: String, CodingKey {
         case consultationId = "id"
         case status = "status"
@@ -98,8 +110,9 @@ public class Consultation: Codable {
         case chatHistory = "chatHistory"
         case recommendation = "recommendation"
         case media = "media"
+        case doctorAverageRating = "doctor_average_rating"
     }
-    
+
     public func toJSON() throws -> Data {
         let encoder = JSONEncoder()
         return try encoder.encode(self)
@@ -109,7 +122,7 @@ public class Consultation: Codable {
 public struct CancelledConsultation: Decodable {
     private(set) public var status: String?
     private(set) public var consultationId: Int?
-    
+
     private enum CodingKeys: String, CodingKey {
         case status = "status"
         case consultationId = "consultation_id"
