@@ -18,8 +18,6 @@ struct NetworkRequest {
             if httpResponse.statusCode >= 400 {
                 completion(nil, data, nil)
             } else {
-//                print("From NetworkRequest, Print JSON Response")
-//                printJsonData(data)
                 if download! {
                     let identifier = "AltibbiFile-\(UUID().uuidString)"
                     let destinationURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]

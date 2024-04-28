@@ -104,6 +104,7 @@ Create and manage consultations using our suite of functions:
 | APi                 | params                              |
 |---------------------|-------------------------------------|
 | createConsultation  | consultation                        |
+| uploadMedia         | jsonFile, type                      |
 | getConsultationInfo | id                                  |
 | getLastConsultation |                                     |
 | getConsultationList | id (optional userId), page, perPage |
@@ -117,6 +118,15 @@ import AltibbiTelehealth
 let consultation = Consultation(userId: intId, question: questionBody!, medium: medium, mediaIds: mediaIds)
 ApiService.createConsultation(consultation: consultation, completion: {createdConsultation, failure, error in
     // Handle createdConsultation as a Consultation object
+})
+```
+
+#### uploadMedia
+```sh
+import AltibbiTelehealth
+
+ApiService.uploadMedia(jsonFile: data, type: type, completion: {media, failure, error in
+    // Handle media as a Media object and add the id to the consultation mediaIds array
 })
 ```
 

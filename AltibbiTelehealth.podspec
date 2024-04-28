@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-React native SDK provides integration for the Altibbi services, including video consultation, text consultation, push Welcome to the React Native SDK for Altibbi services, your comprehensive solution for integrating health consultation services into your React Native applications. This SDK enables video and text consultations, push notifications, and many other features to provide a seamless healthcare experience.
+Swift SDK provides integration for the Altibbi services, including video consultation, text consultation, and voice consultations and many other features to provide a seamless healthcare experience.
                        DESC
 
   s.homepage         = 'https://github.com/altibbi-com/altibbi-ios-sdk'
