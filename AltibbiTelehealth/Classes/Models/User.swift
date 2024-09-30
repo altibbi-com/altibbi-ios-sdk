@@ -79,7 +79,9 @@ public struct User: Codable {
         case createdAt = "created_at"
         case updatedAt = "updated_at"
         case avatar = "avatar"
-        case relationType = "relationType"
+        case relationType = "relation_type"
+        case insuranceId = "insurance_id"
+        case policyNumber = "policy_number"
     }
     
     

@@ -32,9 +32,12 @@ public struct ApiService {
 
     }
     
-    public static func createConsultation(consultation: Consultation, completion: @escaping (Consultation?, Data?, Error?) -> Void) -> Void {
+    public static func createConsultation(consultation: Consultation,forceWhiteLabelingPartnerName: String? = nil, completion: @escaping (Consultation?, Data?, Error?) -> Void) -> Void {
         
         do {
+            if let forceWhiteLabelingPartnerName = forceWhiteLabelingPartnerName, !forceWhiteLabelingPartnerName.isEmpty {
+                consultation.question += " ~\(forceWhiteLabelingPartnerName)~"
+            }
             if let httpRequest = NetworkRequest.prepareRequest(
                 link: "/consultations",
                 method: "POST",
@@ -266,6 +269,122 @@ public struct ApiService {
         ) {
             NetworkRequest.sendApiRequest(httpRequest, expectedType: String.self, completion: {success, failure, error in
                 completion(success, failure, error)
+            })
+        } else {
+            completion(nil, nil, nil)
+        }
+    }
+    
+    public static func getPredictSummary(id: Int, completion: @escaping (PredictSummary?, Data?, Error?) -> Void) -> Void {
+        if let httpRequest = NetworkRequest.prepareRequest(
+            link: "/consultations/\(id)/predict-summary",
+            method: "GET",
+            params: [:],
+            jsonBody: nil
+        ) {
+            NetworkRequest.sendApiRequest(httpRequest, download: true, expectedType: PredictSummary.self, completion: {predictSummary, failure, error in
+                completion(predictSummary, failure, error)
+            })
+        } else {
+            completion(nil, nil, nil)
+        }
+    }
+    
+    public static func getSoapSummary(id: Int, completion: @escaping (Soap?, Data?, Error?) -> Void) -> Void {
+        if let httpRequest = NetworkRequest.prepareRequest(
+            link: "/consultations/\(id)/soap-summary",
+            method: "GET",
+            params: [:],
+            jsonBody: nil
+        ) {
+            NetworkRequest.sendApiRequest(httpRequest, download: true, expectedType: Soap.self, completion: {soapSummary, failure, error in
+                completion(soapSummary, failure, error)
+            })
+        } else {
+            completion(nil, nil, nil)
+        }
+    }
+    
+    public static func getTranscription(id: Int, completion: @escaping (Transcription?, Data?, Error?) -> Void) -> Void {
+        if let httpRequest = NetworkRequest.prepareRequest(
+            link: "/consultations/\(id)/getTranscription",
+            method: "GET",
+            params: [:],
+            jsonBody: nil
+        ) {
+            NetworkRequest.sendApiRequest(httpRequest, download: true, expectedType: Transcription.self, completion: {transcription, failure, error in
+                completion(transcription, failure, error)
+            })
+        } else {
+            completion(nil, nil, nil)
+        }
+    }
+    
+    public static func getPredictSpecialty(id: Int, completion: @escaping (PredictSpecialty?, Data?, Error?) -> Void) -> Void {
+        if let httpRequest = NetworkRequest.prepareRequest(
+            link: "/consultations/\(id)/predict-specialty",
+            method: "GET",
+            params: [:],
+            jsonBody: nil
+        ) {
+            NetworkRequest.sendApiRequest(httpRequest, download: true, expectedType: PredictSpecialty.self, completion: {speciality, failure, error in
+                completion(speciality, failure, error)
+            })
+        } else {
+            completion(nil, nil, nil)
+        }
+    }
+    
+    public static func getMediaList(page: Int, perPage: Int, completion: @escaping ([Media]?, Data?, Error?) -> Void) -> Void {
+        var requestParams: Dictionary<String, Any> = [
+            "page": String(page),
+            "per-page": String(perPage)
+        ]
+        if let httpRequest = NetworkRequest.prepareRequest(
+            link: "/media",
+            method: "GET",
+            params: requestParams,
+            jsonBody: nil
+        ) {
+            NetworkRequest.sendApiRequest(httpRequest, expectedType: [Media].self, completion: {mediaList, failure, error in
+                completion(mediaList, failure, error)
+            })
+        } else {
+            completion(nil, nil, nil)
+        }
+    }
+    
+    public static func deleteMedia(id: Int, completion: @escaping (String?, Data?, Error?) -> Void) -> Void {
+        if let httpRequest = NetworkRequest.prepareRequest(
+            link: "/media/\(id)",
+            method: "DELETE",
+            params: [:],
+            jsonBody: nil
+        ) {
+            NetworkRequest.sendApiRequest(httpRequest, expectedType: String.self, completion: {success, failure, error in
+                completion(success, failure, error)
+            })
+        } else {
+            completion(nil, nil, nil)
+        }
+    }
+    
+    
+    public static func getArticlesList(subcategoryIds: [Int], page: Int, perPage: Int, completion: @escaping ([Article]?, Data?, Error?) -> Void) -> Void {
+        let requestParams: Dictionary<String, Any> = [
+            "page": String(page),
+            "per-page": String(perPage),
+            "filter[sub_category_id][in]": subcategoryIds,
+            "sort": "-article_id",
+        ]
+        if let httpRequest = NetworkRequest.prepareRequest(
+            link: "https://rest-api.altibbi.com/active/v1/articles",
+            method: "GET",
+            params: requestParams,
+            jsonBody: nil
+        ) {
+            NetworkRequest.sendApiRequest(httpRequest, expectedType: [Article].self, completion: {articlesList, failure, error in
+                completion(articlesList, failure, error)
             })
         } else {
             completion(nil, nil, nil)

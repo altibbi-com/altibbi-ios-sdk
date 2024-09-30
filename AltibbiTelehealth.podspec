@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AltibbiTelehealth'
-  s.version          = '0.1.2'
+  s.version          = '0.1.3'
   s.summary          = 'React native SDK provides integration for the Altibbi services.'
   s.swift_version    = "5.0"
 

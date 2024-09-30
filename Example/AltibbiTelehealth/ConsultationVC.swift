@@ -155,8 +155,9 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
             return
         }
         if let intId = Int(userId!) {
-            let consultation = Consultation(userId: intId, question: questionBody!, medium: medium, mediaIds: mediaIds)
+            let consultation = Consultation(userId: intId, question: questionBody!, medium: medium, mediaIds: mediaIds)//parentConsultationId: 123 in case user asked to followup on previous consultation
     
+            //ApiService.createConsultation(consultation: consultation,forceWhiteLabelingPartnerName: "YourcompanyName" // in case partner needed doctors to white label themselved from their company
             ApiService.createConsultation(consultation: consultation, completion: {createdConsultation, failure, error in
                 if let error = error {
                     print("Data Error: \(String(describing: error))")
@@ -318,6 +319,47 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
                     destVc.receivedData = data
                 }
             }
+        }
+    }
+    
+    
+    func attachAsCSV(jsonData: [[String: String]]) {
+        do {
+            let fileName = "attach-consultation-\(Int(Date().timeIntervalSince1970)).csv"
+            let fileManager = FileManager.default
+            let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
+            let documentsDirectory = urls[0]
+            let fileURL = documentsDirectory.appendingPathComponent(fileName)
+
+            var csvContent = ""
+
+            if let headers = jsonData.first?.keys {
+                csvContent.append(headers.joined(separator: ",") + "\n")
+
+                for row in jsonData {
+                    let rowValues = row.values.joined(separator: ",")
+                    csvContent.append(rowValues + "\n")
+                }
+            }
+
+            try csvContent.write(to: fileURL, atomically: true, encoding: .utf8)
+
+            if let csvData = try? Data(contentsOf: fileURL) {
+                ApiService.uploadMedia(jsonFile: csvData, type: "text/csv", completion: { media, failure, error in
+                    if let error = error {
+                        print("Data Error: \(String(describing: error))")
+                    } else if let failure = failure {
+                        ResponseFailure.printJsonData(failure)
+                    } else if let media = media {
+                        DispatchQueue.main.async {
+                            self.mediaIds.append(media.id!)
+                        }
+                        print("Media IDs: \(String(describing: self.mediaIds))")
+                    }
+                })
+            }
+        } catch let error {
+            print("Error writing or uploading CSV file: \(error.localizedDescription)")
         }
     }
 }
