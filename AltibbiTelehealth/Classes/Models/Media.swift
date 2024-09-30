@@ -16,7 +16,7 @@ public struct Media: Codable {
     private(set) public var size: Int?
     private(set) public var createdAt: String?
     private(set) public var url: String?
-    
+
     private enum CodingKeys: String, CodingKey {
         case id = "id"
         case type = "type"
@@ -26,6 +26,6 @@ public struct Media: Codable {
         case size = "size"
         case createdAt = "created_at"
         case url = "url"
-        
+
     }
 }

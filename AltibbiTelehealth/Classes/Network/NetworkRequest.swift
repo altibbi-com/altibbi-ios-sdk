@@ -48,7 +48,7 @@ struct NetworkRequest {
         if let host = AltibbiService.baseUrl,
            let token = AltibbiService.token {
             print("TOKEN: \(token)")
-            let urlLink = "https://" + host + "/v1\(link)"
+            let urlLink = link.contains("rest-api") ? ("https://" + host + "/v1\(link)") : link
             var urlComponents = URLComponents(string: urlLink)!
             
             // MARK: For parameters like expand

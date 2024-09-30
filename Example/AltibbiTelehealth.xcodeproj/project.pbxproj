@@ -276,10 +276,12 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 3P99GAP385;
 						LastSwiftMigration = 0900;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 3P99GAP385;
 						LastSwiftMigration = "";
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -597,6 +599,7 @@
 			baseConfigurationReference = 9AF3F33D37A3B2CA118813CE /* Pods-AltibbiTelehealth_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 3P99GAP385;
 				INFOPLIST_FILE = AltibbiTelehealth/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -613,6 +616,7 @@
 			baseConfigurationReference = 4E4AD0AEA5B2BB51DB4C1A9D /* Pods-AltibbiTelehealth_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 3P99GAP385;
 				INFOPLIST_FILE = AltibbiTelehealth/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -628,6 +632,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DCF74DA035CA393A332C322C /* Pods-AltibbiTelehealth_Tests.debug.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 3P99GAP385;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -651,6 +656,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9BBC9C8BE95B1EDBA6756BD3 /* Pods-AltibbiTelehealth_Tests.release.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 3P99GAP385;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
