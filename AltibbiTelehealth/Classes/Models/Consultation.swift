@@ -54,6 +54,7 @@ public class Consultation: Codable {
     public var medium: String
     public var mediaIds: [String]?
     public var parentConsultationId: Int?
+    public var consultationCategoryId: Int?
     private(set) public var consultationId: Int?
     private(set) public var status: String?
     private(set) public var isFulfilled: Int?
@@ -77,12 +78,13 @@ public class Consultation: Codable {
 
 
     // MARK: This init used for creating consultations
-    public init(userId: Int, question: String, medium: String, mediaIds: [String]? = nil, parentConsultationId: Int? = nil) {
+    public init(userId: Int, question: String, medium: String, mediaIds: [String]? = nil, parentConsultationId: Int? = nil, consultationCategoryId: Int? = nil) {
         self.userId = userId
         self.question = question
         self.medium = medium
         self.mediaIds = mediaIds
         self.parentConsultationId = parentConsultationId
+        self.consultationCategoryId = consultationCategoryId
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -94,6 +96,7 @@ public class Consultation: Codable {
         case medium = "medium"
         case mediaIds = "media_ids"
         case parentConsultationId = "parent_consultation_id"
+        case consultationCategoryId = "consultation_category_id"
         case doctorName = "doctor_name"
         case doctorAvatar = "doctor_avatar"
         case createdAt = "created_at"
