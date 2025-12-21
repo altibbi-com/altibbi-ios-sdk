@@ -6,6 +6,7 @@
 //  Copyright © 2023 CocoaPods. All rights reserved.
 //
 
+import UIKit
 import Foundation
 import PDFKit
 
@@ -13,7 +14,7 @@ class PrescriptionVC: UIViewController {
 
     var receivedData: URL?
     var pdfView: PDFView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         if receivedData != nil {

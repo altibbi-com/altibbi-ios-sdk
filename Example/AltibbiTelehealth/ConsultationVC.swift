@@ -6,6 +6,7 @@
 //  Copyright © 2023 CocoaPods. All rights reserved.
 //
 
+import UIKit
 import Foundation
 import AltibbiTelehealth
 import MobileCoreServices
@@ -25,7 +26,7 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var viewIdField: UITextField!
     @IBOutlet weak var prescriptionIdField: UITextField!
     @IBOutlet weak var listFilterField: UITextField!
-    
+
     public func showAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (_) in
@@ -34,20 +35,20 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         questionField.layer.borderColor = UIColor.gray.cgColor
         questionField.layer.borderWidth = 1.0
         questionField.layer.cornerRadius = 5.0
     }
-    
+
     func showFilePicker() {
         let documentPicker = UIDocumentPickerViewController(documentTypes: [kUTTypePDF as String], in: .import)
         documentPicker.delegate = self
         present(documentPicker, animated: true, completion: nil)
     }
-    
+
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let fileURL = urls.first else { return }
 
@@ -70,15 +71,15 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
             print("File Selected: Not PDF")
         }
     }
-    
+
     func showImagePicker() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.sourceType = .photoLibrary // Use .camera for camera access
-        
+
         present(imagePicker, animated: true, completion: nil)
     }
-    
+
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         picker.dismiss(animated: true, completion: nil)
 
@@ -89,7 +90,7 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
         }
     }
-    
+
     func handleFileUpload(data: Data, type: String) -> Void {
         ApiService.uploadMedia(jsonFile: data, type: type, completion: {media, failure, error in
             if let error = error {
@@ -156,7 +157,7 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
         if let intId = Int(userId!) {
             let consultation = Consultation(userId: intId, question: questionBody!, medium: medium, mediaIds: mediaIds)//parentConsultationId: 123 in case user asked to followup on previous consultation
-    
+
             //ApiService.createConsultation(consultation: consultation,forceWhiteLabelingPartnerName: "YourcompanyName" // in case partner needed doctors to white label themselved from their company
             ApiService.createConsultation(consultation: consultation, completion: {createdConsultation, failure, error in
                 if let error = error {
@@ -175,7 +176,7 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
                     }
                 }
             })
-            
+
         } else {
             self.showAlert(title: "User ID", message: "Insert Valid User ID")
         }
@@ -201,7 +202,7 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
         }
     }
-    
+
     @IBAction func cancelClicked(_ sender: Any) {
         if let deleteId = deleteIdField.text, deleteId.count > 0, let intId = Int(deleteId) {
             ApiService.cancelConsultation(id: intId, completion: {cancelledConsultation, failure, error in
@@ -321,8 +322,8 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
         }
     }
-    
-    
+
+
     func attachAsCSV(jsonData: [[String: String]]) {
         do {
             let fileName = "attach-consultation-\(Int(Date().timeIntervalSince1970)).csv"

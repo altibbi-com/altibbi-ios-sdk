@@ -8,6 +8,14 @@
 
 import UIKit
 import AltibbiTelehealth
+// NOTE: For video consultation, add Vonage Video SDK via SPM:
+//   File → Add Package Dependencies → https://github.com/vonage/vonage-video-client-sdk-swift.git
+//   Version: Choose "Up to Next Major Version" from 2.32.1
+//   Then import: import VonageClientSDKVideo
+//   Also add -ObjC to "Other Linker Flags" in Build Settings (required)
+//   See: https://github.com/vonage/vonage-video-client-sdk-swift
+//
+// For now, this file uses OpenTok (requires manual framework addition):
 import OpenTok
 
 // *** Fill the following variables using your own Project info  ***
@@ -30,9 +38,9 @@ class VideoConsultationVC: UIViewController {
         }
         return OTSession(apiKey: consultationInfo?.videoConfig?.apiKey ?? "", sessionId: consultationInfo?.videoConfig?.callId ?? "", delegate: self)!
     }()
-    
+
     var consultationInfo: Consultation?
-    
+
     lazy var publisher: OTPublisher = {
         let settings = OTPublisherSettings()
         settings.name = UIDevice.current.name
@@ -41,9 +49,9 @@ class VideoConsultationVC: UIViewController {
         }
         return OTPublisher(delegate: self, settings: settings)!
     }()
-    
+
     var subscriber: OTSubscriber?
-    
+
     @IBAction func muteButtonTapped(_ sender: UIButton) {
         publisher.publishAudio = !publisher.publishAudio
 
@@ -71,8 +79,8 @@ class VideoConsultationVC: UIViewController {
             sender.setTitle("Enable Video", for: .normal)
         }
     }
-    
-    
+
+
     public func showAlert(title: String, message: String, goBack: Bool = false) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (_) in
@@ -83,7 +91,7 @@ class VideoConsultationVC: UIViewController {
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
     }
-    
+
     @IBAction func endCallButtonTapped(_ sender: UIButton) {
         var error: OTError?
         session.disconnect(&error)
@@ -102,7 +110,7 @@ class VideoConsultationVC: UIViewController {
                 }
             })
         }
-        
+
     }
 
     var scrollView: UIScrollView!
@@ -111,36 +119,36 @@ class VideoConsultationVC: UIViewController {
             scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             view.addSubview(scrollView)
         }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupScrollView()
-        
-        
-        
+
+
+
         let buttonHeight: CGFloat = 50
         let buttonWidth: CGFloat = 250
         let buttonSpacing: CGFloat = 10
         var yOffset: CGFloat = 500
-        
+
         let muteButton = UIButton(frame: CGRect(x: 20, y: yOffset, width: buttonWidth, height: buttonHeight))
         muteButton.setTitle("Mute", for: .normal)
         muteButton.addTarget(self, action: #selector(muteButtonTapped), for: .touchUpInside)
         muteButton.backgroundColor = .gray
         scrollView.addSubview(muteButton)
         yOffset += buttonHeight + buttonSpacing
-        
-        
+
+
         if (consultationInfo?.medium == "video") {
-            
+
             let switchCameraButton = UIButton(frame: CGRect(x: 20, y: yOffset, width: buttonWidth, height: buttonHeight))
             switchCameraButton.setTitle("Rear Camera", for: .normal)
             switchCameraButton.addTarget(self, action: #selector(switchCameraButtonTapped), for: .touchUpInside)
             switchCameraButton.backgroundColor = .green
             scrollView.addSubview(switchCameraButton)
             yOffset += buttonHeight + buttonSpacing
-            
+
             let toggleVideoButton = UIButton(frame: CGRect(x: 20, y: yOffset, width: buttonWidth, height: buttonHeight))
             toggleVideoButton.setTitle("Disable Video", for: .normal)
             toggleVideoButton.backgroundColor = .blue
@@ -158,11 +166,11 @@ class VideoConsultationVC: UIViewController {
         yOffset += buttonHeight + buttonSpacing
 
         scrollView.contentSize = CGSize(width: view.frame.width, height: yOffset)
- 
-        
+
+
         doConnect()
     }
-    
+
     /**
      * Asynchronously begins the session connect process. Some time later, we will
      * expect a delegate method to call us back with the results of this action.
@@ -174,7 +182,7 @@ class VideoConsultationVC: UIViewController {
         }
         session.connect(withToken: consultationInfo?.medium == "voip" ? (consultationInfo?.voipConfig?.token ?? "") : (consultationInfo?.videoConfig?.token ?? ""), error: &error)
     }
-    
+
     /**
      * Sets up an instance of OTPublisher to use with this session. OTPubilsher
      * binds to the device camera and microphone, and will provide A/V streams
@@ -185,9 +193,9 @@ class VideoConsultationVC: UIViewController {
         defer {
             processError(error)
         }
-        
+
         session.publish(publisher, error: &error)
-        
+
         if let pubView = publisher.view {
             pubView.frame = CGRect(x: 0, y: 0, width: kWidgetWidth, height: kWidgetHeight)
             if (consultationInfo?.medium == "video"){
@@ -196,7 +204,7 @@ class VideoConsultationVC: UIViewController {
             //view.addSubview(pubView)
         }
     }
-    
+
     /**
      * Instantiates a subscriber for the given stream and asynchronously begins the
      * process to begin receiving A/V content for this stream. Unlike doPublish,
@@ -209,19 +217,19 @@ class VideoConsultationVC: UIViewController {
             processError(error)
         }
         subscriber = OTSubscriber(stream: stream, delegate: self)
-        
+
         session.subscribe(subscriber!, error: &error)
     }
-    
+
     fileprivate func cleanupSubscriber() {
         subscriber?.view?.removeFromSuperview()
         subscriber = nil
     }
-    
+
     fileprivate func cleanupPublisher() {
         publisher.view?.removeFromSuperview()
     }
-    
+
     fileprivate func processError(_ error: OTError?) {
         if let err = error {
             DispatchQueue.main.async {
@@ -239,29 +247,29 @@ extension VideoConsultationVC: OTSessionDelegate {
         print("Session connected")
         doPublish()
     }
-    
+
     func sessionDidDisconnect(_ session: OTSession) {
         print("Session disconnected")
     }
-    
+
     func session(_ session: OTSession, streamCreated stream: OTStream) {
         print("Session streamCreated: \(stream.streamId)")
         if subscriber == nil {
             doSubscribe(stream)
         }
     }
-    
+
     func session(_ session: OTSession, streamDestroyed stream: OTStream) {
         print("Session streamDestroyed: \(stream.streamId)")
         if let subStream = subscriber?.stream, subStream.streamId == stream.streamId {
             cleanupSubscriber()
         }
     }
-    
+
     func session(_ session: OTSession, didFailWithError error: OTError) {
         print("session Failed to connect: \(error.localizedDescription)")
     }
-    
+
 }
 
 // MARK: - OTPublisher delegate callbacks
@@ -269,14 +277,14 @@ extension VideoConsultationVC: OTPublisherDelegate {
     func publisher(_ publisher: OTPublisherKit, streamCreated stream: OTStream) {
         print("Publishing")
     }
-    
+
     func publisher(_ publisher: OTPublisherKit, streamDestroyed stream: OTStream) {
         cleanupPublisher()
         if let subStream = subscriber?.stream, subStream.streamId == stream.streamId {
             cleanupSubscriber()
         }
     }
-    
+
     func publisher(_ publisher: OTPublisherKit, didFailWithError error: OTError) {
         print("Publisher failed: \(error.localizedDescription)")
     }
@@ -291,7 +299,7 @@ extension VideoConsultationVC: OTSubscriberDelegate {
             //view.addSubview(subsView)
         }
     }
-    
+
     func subscriber(_ subscriber: OTSubscriberKit, didFailWithError error: OTError) {
         print("Subscriber failed: \(error.localizedDescription)")
     }

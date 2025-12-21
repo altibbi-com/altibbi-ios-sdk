@@ -4,6 +4,7 @@ public struct AltibbiService {
     private(set) public static var token: String?
     private(set) public static var baseUrl: String?
     private(set) public static var language: String = "ar"
+    public static var enableDebugLog: Bool = false
 
     public static func initService(token: String, baseUrl: String, language: String?) {
         AltibbiService.token = token

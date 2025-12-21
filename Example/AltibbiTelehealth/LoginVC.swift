@@ -6,6 +6,7 @@
 //  Copyright © 2023 CocoaPods. All rights reserved.
 //
 
+import UIKit
 import Foundation
 import AltibbiTelehealth
 
@@ -30,7 +31,7 @@ class LoginVC: UIViewController {
                 errorLbl.text = "Please Insert Token!"
                 return
             }
-            AltibbiService.initService(token: tokenTxt, baseUrl: "", language: "en")
+            AltibbiService.initService(token: tokenTxt, baseUrl: "insurance.altibb.com", language: "en")
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toOptionsSegue", sender: nil)
             }

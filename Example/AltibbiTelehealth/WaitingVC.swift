@@ -6,6 +6,7 @@
 //  Copyright © 2023 CocoaPods. All rights reserved.
 //
 
+import UIKit
 import Foundation
 import AltibbiTelehealth
 

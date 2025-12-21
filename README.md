@@ -22,7 +22,7 @@ AltibbiTelehealth is available through Swift Package Manager. To install it:
 
 1. In Xcode, go to **File** → **Add Package Dependencies...**
 2. Enter the repository URL: `https://github.com/altibbi-com/altibbi-ios-sdk.git`
-3. Select the version you want to use
+3. Select the version you want to use (choose "Up to Next Major Version" to allow minor/patch updates)
 4. Click **Add Package**
 
 Or add it to your `Package.swift`:
@@ -37,9 +37,11 @@ dependencies: [
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/vonage/vonage-client-sdk-video.git", from: "2.31.1")
+    .package(url: "https://github.com/vonage/vonage-video-client-sdk-swift.git", from: "2.32.1")
 ]
 ```
+
+**Important:** When adding via Xcode, choose "Up to Next Major Version" to allow minor and patch updates while preventing breaking changes from major version updates.
 
 Or use the legacy OpenTok framework via CocoaPods: `pod 'OTXCFramework'`
 
@@ -313,11 +315,15 @@ For video consultation features, you need to add a video SDK. We recommend using
 **Option 1: Vonage Video SDK (Recommended - SPM compatible)**
 ```swift
 // Add to your Package.swift dependencies:
-.package(url: "https://github.com/vonage/vonage-client-sdk-video.git", from: "2.31.1")
+.package(url: "https://github.com/vonage/vonage-video-client-sdk-swift.git", from: "2.32.1")
 
 // Or add via Xcode: File → Add Package Dependencies →
-// URL: https://github.com/vonage/vonage-client-sdk-video.git
+// URL: https://github.com/vonage/vonage-video-client-sdk-swift.git
+// Version: Choose "Up to Next Major Version" (recommended)
+// Then import: import VonageClientSDKVideo
 ```
+
+**Note:** When adding via Xcode, select "Up to Next Major Version" to automatically receive minor and patch updates while preventing breaking changes from major version updates. Also add `-ObjC` to "Other Linker Flags" in Build Settings (required by the SDK).
 
 **Option 2: OpenTok (Legacy - CocoaPods only)**
 ```ruby
