@@ -142,7 +142,7 @@ public struct ApiService {
             jsonBody: nil
         ) {
             NetworkRequest.sendApiRequest(httpRequest, expectedType: [Consultation].self, completion: {consultations, failure, error in
-                completion(consultations?[0] as? Consultation, failure, error)
+                completion(consultations?.first as? Consultation, failure, error)
 
             })
         } else {
