@@ -8,14 +8,14 @@
 import Foundation
 
 public struct ApiService {
-    
+
     public static func uploadMedia(jsonFile: Data, type: String, completion: @escaping (Media?, Data?, Error?) -> Void) -> Void {
         let boundary = "Boundary-\(UUID().uuidString)"
         let ext = type == "pdf" ? "pdf" : "jpg"
         let fileName = "file-\(UUID().uuidString).\(ext)"
         let contentType = type == "pdf" ? "application/pdf" : "image/jpeg"
         let jsonData = NetworkRequest.fileToData(jsonFile: jsonFile, name: "file", fileName: "\(fileName)", boundary: boundary, type: contentType)
-        
+
         if let httpRequest = NetworkRequest.prepareRequest(
             link: "/media",
             method: "POST",
@@ -31,9 +31,9 @@ public struct ApiService {
         }
 
     }
-    
+
     public static func createConsultation(consultation: Consultation,forceWhiteLabelingPartnerName: String? = nil, completion: @escaping (Consultation?, Data?, Error?) -> Void) -> Void {
-        
+
         do {
             if let forceWhiteLabelingPartnerName = forceWhiteLabelingPartnerName, !forceWhiteLabelingPartnerName.isEmpty {
                 consultation.question += " ~\(forceWhiteLabelingPartnerName)~"
@@ -57,7 +57,7 @@ public struct ApiService {
             completion(nil, nil, error)
         }
     }
-    
+
     public static func cancelConsultation(id: Int, completion: @escaping (CancelledConsultation?, Data?, Error?) -> Void) -> Void {
         if let httpRequest = NetworkRequest.prepareRequest(
             link: "/consultations/\(id)/cancel",
@@ -72,7 +72,7 @@ public struct ApiService {
             completion(nil, nil, nil)
         }
     }
-    
+
     public static func deleteConsultation(id: Int, completion: @escaping (String?, Data?, Error?) -> Void) -> Void {
         if let httpRequest = NetworkRequest.prepareRequest(
             link: "/consultations/\(id)",
@@ -87,7 +87,7 @@ public struct ApiService {
             completion(nil, nil, nil)
         }
     }
-    
+
     public static func getConsultationInfo(id: Int, completion: @escaping (Consultation?, Data?, Error?) -> Void) -> Void {
         if let httpRequest = NetworkRequest.prepareRequest(
             link: "/consultations/\(id)",
@@ -104,7 +104,7 @@ public struct ApiService {
             completion(nil, nil, nil)
         }
     }
-    
+
     public static func getConsultationList(userId: Int? = nil, page: Int, perPage: Int, completion: @escaping ([Consultation]?, Data?, Error?) -> Void) -> Void {
         var requestParams: Dictionary<String, Any> = [
             "page": String(page),
@@ -128,7 +128,7 @@ public struct ApiService {
             completion(nil, nil, nil)
         }
     }
-    
+
     public static func getLastConsultation(completion: @escaping (Consultation?, Data?, Error?) -> Void) -> Void {
         let requestParams = [
             "per-page": "1",
@@ -149,7 +149,7 @@ public struct ApiService {
             completion(nil, nil, nil)
         }
     }
-    
+
     public static func getPrescription(id: Int, completion: @escaping (URL?, Data?, Error?) -> Void) -> Void {
         if let httpRequest = NetworkRequest.prepareRequest(
             link: "/consultations/\(id)/download-prescription",
@@ -164,7 +164,7 @@ public struct ApiService {
             completion(nil, nil, nil)
         }
     }
-    
+
     public static func getUser(id: Int, completion: @escaping (User?, Data?, Error?) -> Void) -> Void {
         if let httpRequest = NetworkRequest.prepareRequest(
             link: "/users/\(id)",
@@ -180,7 +180,7 @@ public struct ApiService {
             completion(nil, nil, nil)
         }
     }
-    
+
     public static func deleteUser(id: Int, completion: @escaping (String?, Data?, Error?) -> Void) -> Void {
         if let httpRequest = NetworkRequest.prepareRequest(
             link: "/users/\(id)",
@@ -195,7 +195,7 @@ public struct ApiService {
             completion(nil, nil, nil)
         }
     }
-    
+
     public static func getUsers(page: Int, perPage: Int, completion: @escaping ([User]?, Data?, Error?) -> Void) -> Void {
         let requestParams = [
             "page": String(page),
@@ -215,7 +215,7 @@ public struct ApiService {
             completion(nil, nil, nil)
         }
     }
-    
+
     public static func updateUser(id: Int, userData: User, completion: @escaping (User?, Data?, Error?) -> Void) -> Void {
         do {
             print("From ApiService on Calling updateUser, the JSON data to be sent:")
@@ -236,9 +236,9 @@ public struct ApiService {
         } catch {
             completion(nil, nil, error)
         }
-        
+
     }
-    
+
     public static func createUser(userData: User, completion: @escaping (User?, Data?, Error?) -> Void) -> Void {
         do {
             if let httpRequest = try NetworkRequest.prepareRequest(
@@ -257,7 +257,7 @@ public struct ApiService {
             completion(nil, nil, error)
         }
     }
-    
+
     public static func rateConsultation(id: Int,score: Int, completion: @escaping (String?, Data?, Error?) -> Void) -> Void {
         let jsonData = try? JSONSerialization.data(withJSONObject: ["score": score], options: [])
 
@@ -274,7 +274,7 @@ public struct ApiService {
             completion(nil, nil, nil)
         }
     }
-    
+
     public static func getPredictSummary(id: Int, completion: @escaping (PredictSummary?, Data?, Error?) -> Void) -> Void {
         if let httpRequest = NetworkRequest.prepareRequest(
             link: "/consultations/\(id)/predict-summary",
@@ -289,7 +289,7 @@ public struct ApiService {
             completion(nil, nil, nil)
         }
     }
-    
+
     public static func getSoapSummary(id: Int, completion: @escaping (Soap?, Data?, Error?) -> Void) -> Void {
         if let httpRequest = NetworkRequest.prepareRequest(
             link: "/consultations/\(id)/soap-summary",
@@ -304,7 +304,7 @@ public struct ApiService {
             completion(nil, nil, nil)
         }
     }
-    
+
     public static func getTranscription(id: Int, completion: @escaping (Transcription?, Data?, Error?) -> Void) -> Void {
         if let httpRequest = NetworkRequest.prepareRequest(
             link: "/consultations/\(id)/getTranscription",
@@ -319,7 +319,7 @@ public struct ApiService {
             completion(nil, nil, nil)
         }
     }
-    
+
     public static func getPredictSpecialty(id: Int, completion: @escaping (PredictSpecialty?, Data?, Error?) -> Void) -> Void {
         if let httpRequest = NetworkRequest.prepareRequest(
             link: "/consultations/\(id)/predict-specialty",
@@ -334,7 +334,7 @@ public struct ApiService {
             completion(nil, nil, nil)
         }
     }
-    
+
     public static func getMediaList(page: Int, perPage: Int, completion: @escaping ([Media]?, Data?, Error?) -> Void) -> Void {
         var requestParams: Dictionary<String, Any> = [
             "page": String(page),
@@ -353,7 +353,7 @@ public struct ApiService {
             completion(nil, nil, nil)
         }
     }
-    
+
     public static func deleteMedia(id: Int, completion: @escaping (String?, Data?, Error?) -> Void) -> Void {
         if let httpRequest = NetworkRequest.prepareRequest(
             link: "/media/\(id)",
@@ -368,8 +368,8 @@ public struct ApiService {
             completion(nil, nil, nil)
         }
     }
-    
-    
+
+
     public static func getArticlesList(subcategoryIds: [Int], page: Int, perPage: Int, completion: @escaping ([Article]?, Data?, Error?) -> Void) -> Void {
         let requestParams: Dictionary<String, Any> = [
             "page": String(page),
