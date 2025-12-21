@@ -497,7 +497,7 @@
 			repositoryURL = "https://github.com/altibbi-com/altibbi-ios-sdk.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.9;
+				minimumVersion = 0.2.0;
 			};
 		};
 		97FC9FDC2EF85D3000BBA0EF /* XCRemoteSwiftPackageReference "vonage-video-client-sdk-swift" */ = {

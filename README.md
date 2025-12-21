@@ -20,10 +20,12 @@ project.
 
 AltibbiTelehealth is available through Swift Package Manager. To install it:
 
-1. In Xcode, go to **File** → **Add Package Dependencies...**
-2. Enter the repository URL: `https://github.com/altibbi-com/altibbi-ios-sdk.git`
-3. Select the version you want to use (choose "Up to Next Major Version" to allow minor/patch updates)
-4. Click **Add Package**
+1. In Xcode, select your project in the Project Navigator
+2. Select your target, then go to the **Package Dependencies** tab
+3. Click the **+** button to add a package
+4. Enter the repository URL: `https://github.com/altibbi-com/altibbi-ios-sdk.git`
+5. Select the version you want to use (choose "Up to Next Major Version" to allow minor/patch updates)
+6. Click **Add Package**
 
 Or add it to your `Package.swift`:
 
@@ -317,10 +319,12 @@ For video consultation features, you need to add a video SDK. We recommend using
 // Add to your Package.swift dependencies:
 .package(url: "https://github.com/vonage/vonage-video-client-sdk-swift.git", from: "2.32.1")
 
-// Or add via Xcode: File → Add Package Dependencies →
-// URL: https://github.com/vonage/vonage-video-client-sdk-swift.git
-// Version: Choose "Up to Next Major Version" (recommended)
-// Then import: import VonageClientSDKVideo
+// Or add via Xcode:
+// 1. Select your project → Target → Package Dependencies tab
+// 2. Click + button
+// 3. Enter URL: https://github.com/vonage/vonage-video-client-sdk-swift.git
+// 4. Version: Choose "Up to Next Major Version" (recommended)
+// 5. Then import: import VonageClientSDKVideo
 ```
 
 **Note:** When adding via Xcode, select "Up to Next Major Version" to automatically receive minor and patch updates while preventing breaking changes from major version updates. Also add `-ObjC` to "Other Linker Flags" in Build Settings (required by the SDK).

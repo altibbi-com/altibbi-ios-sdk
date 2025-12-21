@@ -9,10 +9,12 @@
 import UIKit
 import AltibbiTelehealth
 // NOTE: For video consultation, add Vonage Video SDK via SPM:
-//   File → Add Package Dependencies → https://github.com/vonage/vonage-video-client-sdk-swift.git
-//   Version: Choose "Up to Next Major Version" from 2.32.1
-//   Then import: import VonageClientSDKVideo
-//   Also add -ObjC to "Other Linker Flags" in Build Settings (required)
+//   1. Select your project → Target → Package Dependencies tab
+//   2. Click + button
+//   3. Enter URL: https://github.com/vonage/vonage-video-client-sdk-swift.git
+//   4. Version: Choose "Up to Next Major Version" from 2.32.1
+//   5. Then import: import VonageClientSDKVideo
+//   6. Also add -ObjC to "Other Linker Flags" in Build Settings (required)
 //   See: https://github.com/vonage/vonage-video-client-sdk-swift
 //
 // For now, this file uses OpenTok (requires manual framework addition):
