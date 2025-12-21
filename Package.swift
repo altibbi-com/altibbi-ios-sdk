@@ -15,11 +15,11 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pusher/pusher-websocket-swift.git",
-            from: "10.1.6"
+            exact: "10.1.6"
         ),
         .package(
             url: "https://github.com/sendbird/sendbird-chat-sdk-ios.git",
-            from: "4.19.2"
+            exact: "4.19.2"
         )
     ],
     targets: [

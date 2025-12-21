@@ -16,7 +16,36 @@ project.
 
 ## Installation
 
-AltibbiTelehealth is available through [CocoaPods](https://cocoapods.org). To install
+### Swift Package Manager (SPM)
+
+AltibbiTelehealth is available through Swift Package Manager. To install it:
+
+1. In Xcode, go to **File** → **Add Package Dependencies...**
+2. Enter the repository URL: `https://github.com/altibbi-com/altibbi-ios-sdk.git`
+3. Select the version you want to use
+4. Click **Add Package**
+
+Or add it to your `Package.swift`:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/altibbi-com/altibbi-ios-sdk.git", from: "0.1.7")
+]
+```
+
+**Note:** If you need video consultation features, you can add the Vonage Video SDK (OpenTok replacement) via SPM:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/vonage/vonage-client-sdk-video.git", from: "2.31.1")
+]
+```
+
+Or use the legacy OpenTok framework via CocoaPods: `pod 'OTXCFramework'`
+
+### CocoaPods
+
+AltibbiTelehealth is also available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```sh
@@ -278,7 +307,25 @@ func sendMessage(msg: String) {
 ```
 
 ### Video Consultation
-#### Check the example project, VideoConsultationVC file
+
+For video consultation features, you need to add a video SDK. We recommend using **Vonage Video SDK** (the modern replacement for OpenTok) which supports Swift Package Manager:
+
+**Option 1: Vonage Video SDK (Recommended - SPM compatible)**
+```swift
+// Add to your Package.swift dependencies:
+.package(url: "https://github.com/vonage/vonage-client-sdk-video.git", from: "2.31.1")
+
+// Or add via Xcode: File → Add Package Dependencies →
+// URL: https://github.com/vonage/vonage-client-sdk-video.git
+```
+
+**Option 2: OpenTok (Legacy - CocoaPods only)**
+```ruby
+# Add to your Podfile:
+pod 'OTXCFramework'
+```
+
+**Note:** The SDK provides video configuration data (apiKey, sessionId, token) through the `Consultation` object. You'll need to integrate the video SDK in your app to handle the actual video call UI. See the example project's `VideoConsultationVC.swift` file for reference.
 
 
 For support, contact: [mobile@altibbi.com](mobile@altibbi.com). Please
