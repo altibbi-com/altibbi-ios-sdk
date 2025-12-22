@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -242,7 +242,7 @@
 			);
 			mainGroup = 607FACC71AFB9204008FA782;
 			packageReferences = (
-				976946ED2EF8581800353B67 /* XCRemoteSwiftPackageReference "altibbi-ios-sdk" */,
+				976946ED2EF8581800353B67 /* XCLocalSwiftPackageReference "../" */,
 				97FC9FDC2EF85D3000BBA0EF /* XCRemoteSwiftPackageReference "vonage-video-client-sdk-swift" */,
 			);
 			productRefGroup = 607FACD11AFB9204008FA782 /* Products */;
@@ -491,15 +491,14 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		976946ED2EF8581800353B67 /* XCRemoteSwiftPackageReference "altibbi-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/altibbi-com/altibbi-ios-sdk.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.0;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		976946ED2EF8581800353B67 /* XCLocalSwiftPackageReference "../" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../;
 		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
 		97FC9FDC2EF85D3000BBA0EF /* XCRemoteSwiftPackageReference "vonage-video-client-sdk-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/vonage/vonage-video-client-sdk-swift.git";
@@ -513,7 +512,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		976946EE2EF8581800353B67 /* AltibbiTelehealth */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 976946ED2EF8581800353B67 /* XCRemoteSwiftPackageReference "altibbi-ios-sdk" */;
+			package = 976946ED2EF8581800353B67 /* XCLocalSwiftPackageReference "../" */;
 			productName = AltibbiTelehealth;
 		};
 		97FC9FDD2EF85D3000BBA0EF /* VonageClientSDKVideo */ = {
