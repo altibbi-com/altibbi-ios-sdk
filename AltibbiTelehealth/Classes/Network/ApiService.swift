@@ -11,9 +11,31 @@ public struct ApiService {
 
     public static func uploadMedia(jsonFile: Data, type: String, completion: @escaping (Media?, Data?, Error?) -> Void) -> Void {
         let boundary = "Boundary-\(UUID().uuidString)"
-        let ext = type == "pdf" ? "pdf" : "jpg"
+
+        let normalizedType = type.lowercased()
+
+        let (ext, contentType): (String, String) = {
+            switch normalizedType {
+            case "jpg", "jpeg":
+                return ("jpg", "image/jpeg")
+            case "png":
+                return ("png", "image/png")
+            case "gif":
+                return ("gif", "image/gif")
+            case "pdf":
+                return ("pdf", "application/pdf")
+            case "xls":
+                return ("xls", "application/vnd.ms-excel")
+            case "xlsx":
+                return ("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            case "csv":
+                return ("csv", "text/csv")
+            default:
+                return (normalizedType.isEmpty ? "bin" : normalizedType, "application/octet-stream")
+            }
+        }()
+
         let fileName = "file-\(UUID().uuidString).\(ext)"
-        let contentType = type == "pdf" ? "application/pdf" : "image/jpeg"
         let jsonData = NetworkRequest.fileToData(jsonFile: jsonFile, name: "file", fileName: "\(fileName)", boundary: boundary, type: contentType)
 
         if let httpRequest = NetworkRequest.prepareRequest(
