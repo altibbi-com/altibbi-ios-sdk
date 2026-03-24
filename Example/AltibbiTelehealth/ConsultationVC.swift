@@ -26,14 +26,110 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var viewIdField: UITextField!
     @IBOutlet weak var prescriptionIdField: UITextField!
     @IBOutlet weak var listFilterField: UITextField!
+    private var selectedFollowUpConsultationId: Int?
+    private var selectedFollowUpShift: String?
 
     public func showAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default) { (_) in
-            // Handle the OK button tap (if needed)
-        }
+        let okAction = UIAlertAction(title: "OK", style: .default) { (_) in }
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
+    }
+
+    private func todayDateString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        return formatter.string(from: Date())
+    }
+
+    private func shiftValue(from shift: ConsultationAvailableShift) -> String? {
+        if let value = normalizedScheduledTo(shift.fullDate) {
+            return value
+        }
+        if let value = normalizedScheduledTo(shift.startAt) {
+            return value
+        }
+        if let value = normalizedScheduledTo(shift.startsAt) {
+            return value
+        }
+        if let value = normalizedScheduledTo(shift.value) {
+            return value
+        }
+        if let value = normalizedScheduledTo(shift.from) {
+            return value
+        }
+        return nil
+    }
+
+    private func normalizedScheduledTo(_ rawValue: String?) -> String? {
+        guard let rawValue = rawValue?.trimmingCharacters(in: .whitespacesAndNewlines), !rawValue.isEmpty else {
+            return nil
+        }
+
+        if rawValue.contains("-") && rawValue.contains(":") {
+            return rawValue
+        }
+
+        if let hour = Int(rawValue), hour >= 0, hour <= 23 {
+            return String(format: "%@ %02d:00:00", todayDateString(), hour)
+        }
+        let parts = rawValue.split(separator: ":").map(String.init)
+        if parts.count == 2,
+           let hour = Int(parts[0]), let minute = Int(parts[1]),
+           hour >= 0, hour <= 23, minute >= 0, minute <= 59 {
+            return String(format: "%@ %02d:%02d:00", todayDateString(), hour, minute)
+        }
+
+        return rawValue
+    }
+
+    private func shiftDisplayText(_ shift: ConsultationAvailableShift) -> String {
+        let fromValue = shift.from ?? shift.startAt ?? shift.startsAt ?? shift.value ?? "-"
+        let toValue = shift.to ?? shift.endAt ?? shift.endsAt
+        if let toValue = toValue, !toValue.isEmpty {
+            return "\(fromValue) -> \(toValue)"
+        }
+        return fromValue
+    }
+
+    private func presentShiftPicker(consultationId: Int, shifts: [ConsultationAvailableShift]) {
+        let alert = UIAlertController(
+            title: "Available Shifts",
+            message: "Choose a shift to create a follow-up consultation.",
+            preferredStyle: .actionSheet
+        )
+
+        for shift in shifts {
+            let title = shiftDisplayText(shift)
+            alert.addAction(UIAlertAction(title: title, style: .default, handler: { _ in
+                self.selectedFollowUpConsultationId = consultationId
+                self.selectedFollowUpShift = self.shiftValue(from: shift)
+                DispatchQueue.main.async {
+                    self.showAlert(
+                        title: "Shift Selected",
+                        message: "Follow-up will be created for consultation #\(consultationId) at \(self.selectedFollowUpShift ?? title)."
+                    )
+                }
+            }))
+        }
+
+        alert.addAction(UIAlertAction(title: "Clear Follow-Up Selection", style: .destructive, handler: { _ in
+            self.selectedFollowUpConsultationId = nil
+            self.selectedFollowUpShift = nil
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+
+        if let popover = alert.popoverPresentationController {
+            popover.sourceView = self.view
+            popover.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.maxY - 1, width: 0, height: 0)
+            popover.permittedArrowDirections = []
+        }
+
+        DispatchQueue.main.async {
+            self.present(alert, animated: true, completion: nil)
+        }
     }
 
     override func viewDidLoad() {
@@ -41,6 +137,35 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
         questionField.layer.borderColor = UIColor.gray.cgColor
         questionField.layer.borderWidth = 1.0
         questionField.layer.cornerRadius = 5.0
+        questionField.isScrollEnabled = false
+
+        if let scrollView = view as? UIScrollView {
+            scrollView.isScrollEnabled = true
+            scrollView.alwaysBounceVertical = true
+            scrollView.keyboardDismissMode = .onDrag
+        }
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateScrollContentSize()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        updateScrollContentSize()
+    }
+
+    private func updateScrollContentSize() {
+        guard let scrollView = view as? UIScrollView else { return }
+        scrollView.layoutIfNeeded()
+
+        let contentHeight = scrollView.subviews
+            .map { $0.frame.maxY }
+            .max() ?? scrollView.bounds.height
+        let bottomPadding: CGFloat = 32
+        let finalHeight = max(contentHeight + bottomPadding, scrollView.bounds.height + 1)
+        scrollView.contentSize = CGSize(width: scrollView.bounds.width, height: finalHeight)
     }
 
     func showFilePicker() {
@@ -75,7 +200,7 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
     func showImagePicker() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary // Use .camera for camera access
+        imagePicker.sourceType = .photoLibrary
 
         present(imagePicker, animated: true, completion: nil)
     }
@@ -156,9 +281,14 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
             return
         }
         if let intId = Int(userId!) {
-            let consultation = Consultation(userId: intId, question: questionBody!, medium: medium, mediaIds: mediaIds)//parentConsultationId: 123 in case user asked to followup on previous consultation
-
-            //ApiService.createConsultation(consultation: consultation,forceWhiteLabelingPartnerName: "YourcompanyName" // in case partner needed doctors to white label themselved from their company
+            let consultation = Consultation(
+                userId: intId,
+                question: questionBody!,
+                medium: medium,
+                mediaIds: mediaIds,
+                scheduledTo: selectedFollowUpShift,
+                parentConsultationId: selectedFollowUpConsultationId
+            )
             ApiService.createConsultation(consultation: consultation, completion: {createdConsultation, failure, error in
                 if let error = error {
                     print("Data Error: \(String(describing: error))")
@@ -170,6 +300,8 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
                             self.questionField.text = ""
                             self.mediaIds = []
                             self.userIdField.text = ""
+                            self.selectedFollowUpConsultationId = nil
+                            self.selectedFollowUpShift = nil
                             self.mediumOptionSelected(nil)
                             self.performSegue(withIdentifier: "waitingConsultationSegue", sender: consultation)
                         }
@@ -234,6 +366,35 @@ class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavig
                 } else {
                     if let consultation = consultation {
                         print("Consultation Info: \(String(describing: consultation))")
+                    }
+                }
+            })
+        } else {
+            DispatchQueue.main.async {
+                self.showAlert(title: "Consultation ID", message: "Insert a Valid ID")
+            }
+        }
+    }
+    @IBAction func getShiftsClicked(_ sender: Any) {
+        if let viewId = viewIdField.text, viewId.count > 0, let intId = Int(viewId) {
+            let date = "2026-03-25"
+            ApiService.getConsultationAvailableShifts(id: intId, date: date, completion: {availableShifts, failure, error in
+                if let error = error {
+                    print("Available Shifts Error: \(String(describing: error))")
+                } else if let failure = failure {
+                    ResponseFailure.printJsonData(failure)
+                } else {
+                    let shifts = availableShifts?.shifts ?? []
+                    print("Available shifts on \(date): \(shifts.count)")
+                    for shift in shifts {
+                        print("Shift value: \(shift.value ?? "-"), from: \(shift.from ?? shift.startAt ?? shift.startsAt ?? "-"), to: \(shift.to ?? shift.endAt ?? shift.endsAt ?? "-")")
+                    }
+                    if shifts.count > 0 {
+                        self.presentShiftPicker(consultationId: intId, shifts: shifts)
+                    } else {
+                        DispatchQueue.main.async {
+                            self.showAlert(title: "Available Shifts", message: "No shifts available for this date.")
+                        }
                     }
                 }
             })

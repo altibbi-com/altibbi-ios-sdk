@@ -31,7 +31,8 @@ class LoginVC: UIViewController {
                 errorLbl.text = "Please Insert Token!"
                 return
             }
-            AltibbiService.initService(token: tokenTxt, baseUrl: "insurance.altibb.com", language: "en")
+            AltibbiService.enableDebugLog = true
+            AltibbiService.initService(token: tokenTxt, baseUrl: "", language: "en")
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toOptionsSegue", sender: nil)
             }

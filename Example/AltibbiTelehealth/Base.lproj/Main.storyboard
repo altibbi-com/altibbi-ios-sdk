@@ -667,7 +667,7 @@
                         <viewControllerLayoutGuide type="top" id="1iq-cK-vZV"/>
                         <viewControllerLayoutGuide type="bottom" id="pj8-RM-rZi"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="ZeM-TK-VeU">
+                    <scrollView key="view" contentMode="scaleToFill" id="ZeM-TK-VeU">
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -833,6 +833,26 @@
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="getConsultationClicked:" destination="8EP-br-lZh" eventType="touchUpInside" id="WiZ-lg-zvI"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7w3-z8-Q3m">
+                                <rect key="frame" x="20" y="608.66666666666663" width="390" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="k5B-36-yuW"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="Get Available Shifts">
+                                            <attributes>
+                                                <font key="NSFont" size="16" name="Helvetica"/>
+                                                <font key="NSOriginalFont" size="12" name="Helvetica"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="getShiftsClicked:" destination="8EP-br-lZh" eventType="touchUpInside" id="lcv-ce-kFu"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Consultations List (User ID Optional)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uVl-3A-gsw">
@@ -1053,6 +1073,7 @@
                             <constraint firstItem="N7H-xd-dM1" firstAttribute="leading" secondItem="ZeM-TK-VeU" secondAttribute="leadingMargin" id="DwQ-P0-gqd"/>
                             <constraint firstItem="EGt-j0-vij" firstAttribute="top" secondItem="FSq-e7-OgG" secondAttribute="bottom" constant="5" id="F2u-O1-62b"/>
                             <constraint firstItem="iR0-ic-MfU" firstAttribute="leading" secondItem="EGt-j0-vij" secondAttribute="trailing" constant="20" id="F7q-2y-D1n"/>
+                            <constraint firstItem="7w3-z8-Q3m" firstAttribute="top" secondItem="iR0-ic-MfU" secondAttribute="bottom" constant="5" id="N3m-hx-64r"/>
                             <constraint firstItem="gu8-OC-s4z" firstAttribute="leading" secondItem="ZeM-TK-VeU" secondAttribute="leadingMargin" id="Fen-gj-Uxk"/>
                             <constraint firstAttribute="trailingMargin" secondItem="6OD-1Y-GV7" secondAttribute="trailing" id="I6X-bE-Rmf"/>
                             <constraint firstItem="X7X-PI-n1N" firstAttribute="top" secondItem="XIg-FI-THo" secondAttribute="bottom" constant="10" id="IdU-76-O9Q"/>
@@ -1086,7 +1107,9 @@
                             <constraint firstItem="cb1-x5-By1" firstAttribute="leading" secondItem="ZeM-TK-VeU" secondAttribute="leadingMargin" id="jQ2-kI-Qe0"/>
                             <constraint firstItem="dWv-Zq-pus" firstAttribute="top" secondItem="cb1-x5-By1" secondAttribute="bottom" constant="5" id="jQx-bg-apc"/>
                             <constraint firstItem="Vvy-4b-Rcb" firstAttribute="top" secondItem="cb1-x5-By1" secondAttribute="bottom" constant="5" id="mLB-gz-UoL"/>
-                            <constraint firstItem="uVl-3A-gsw" firstAttribute="top" secondItem="EGt-j0-vij" secondAttribute="bottom" constant="20" id="maZ-Xm-seL"/>
+                            <constraint firstItem="uVl-3A-gsw" firstAttribute="top" secondItem="7w3-z8-Q3m" secondAttribute="bottom" constant="20" id="maZ-Xm-seL"/>
+                            <constraint firstItem="7w3-z8-Q3m" firstAttribute="leading" secondItem="ZeM-TK-VeU" secondAttribute="leadingMargin" id="p2e-fM-Vgj"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="7w3-z8-Q3m" secondAttribute="trailing" id="uFW-jd-h7H"/>
                             <constraint firstItem="Wki-kk-bXf" firstAttribute="leading" secondItem="gJ9-h0-uAw" secondAttribute="trailing" constant="20" id="nBh-Sl-v9p"/>
                             <constraint firstAttribute="trailingMargin" secondItem="gu8-OC-s4z" secondAttribute="trailing" id="nVr-JO-4wr"/>
                             <constraint firstItem="r80-9n-qjL" firstAttribute="leading" secondItem="ZeM-TK-VeU" secondAttribute="leadingMargin" id="neJ-L8-Qk6"/>
@@ -1100,8 +1123,9 @@
                             <constraint firstItem="X7X-PI-n1N" firstAttribute="leading" secondItem="ZeM-TK-VeU" secondAttribute="leadingMargin" id="tPk-g9-zvi"/>
                             <constraint firstItem="Lm6-Fe-aaG" firstAttribute="top" secondItem="Hkc-qT-Pyv" secondAttribute="bottom" constant="5" id="x4R-Zq-cFB"/>
                             <constraint firstItem="Qmi-z6-Rbw" firstAttribute="top" secondItem="Hkc-qT-Pyv" secondAttribute="bottom" constant="5" id="z76-rr-zs0"/>
+                            <constraint firstAttribute="bottom" secondItem="r80-9n-qjL" secondAttribute="bottom" constant="20" id="zz8-Q4-txS"/>
                         </constraints>
-                    </view>
+                    </scrollView>
                     <navigationItem key="navigationItem" title="Consultation" id="91x-wc-aUs"/>
                     <connections>
                         <outlet property="chatOption" destination="nry-Vo-qv5" id="Vgf-y7-LIi"/>

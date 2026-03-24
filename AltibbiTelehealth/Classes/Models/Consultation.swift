@@ -53,6 +53,7 @@ public class Consultation: Codable {
     public var question: String
     public var medium: String
     public var mediaIds: [String]?
+    public var scheduledTo: String?
     public var parentConsultationId: Int?
     public var consultationCategoryId: Int?
     private(set) public var consultationId: Int?
@@ -78,11 +79,12 @@ public class Consultation: Codable {
 
 
     // MARK: This init used for creating consultations
-    public init(userId: Int, question: String, medium: String, mediaIds: [String]? = nil, parentConsultationId: Int? = nil, consultationCategoryId: Int? = nil) {
+    public init(userId: Int, question: String, medium: String, mediaIds: [String]? = nil, scheduledTo: String? = nil, parentConsultationId: Int? = nil, consultationCategoryId: Int? = nil) {
         self.userId = userId
         self.question = question
         self.medium = medium
         self.mediaIds = mediaIds
+        self.scheduledTo = scheduledTo
         self.parentConsultationId = parentConsultationId
         self.consultationCategoryId = consultationCategoryId
     }
@@ -95,6 +97,7 @@ public class Consultation: Codable {
         case question = "question"
         case medium = "medium"
         case mediaIds = "media_ids"
+        case scheduledTo = "scheduled_to"
         case parentConsultationId = "parent_consultation_id"
         case consultationCategoryId = "consultation_category_id"
         case doctorName = "doctor_name"

@@ -127,6 +127,21 @@ public struct ApiService {
         }
     }
 
+    public static func getConsultationAvailableShifts(id: Int, date: String, completion: @escaping (ConsultationAvailableShifts?, Data?, Error?) -> Void) -> Void {
+        if let httpRequest = NetworkRequest.prepareRequest(
+            link: "/consultations/\(id)/available-shifts",
+            method: "GET",
+            params: ["date": date],
+            jsonBody: nil
+        ) {
+            NetworkRequest.sendApiRequest(httpRequest, expectedType: ConsultationAvailableShifts.self, completion: {availableShifts, failure, error in
+                completion(availableShifts, failure, error)
+            })
+        } else {
+            completion(nil, nil, nil)
+        }
+    }
+
     public static func getConsultationList(userId: Int? = nil, page: Int, perPage: Int, completion: @escaping ([Consultation]?, Data?, Error?) -> Void) -> Void {
         var requestParams: Dictionary<String, Any> = [
             "page": String(page),

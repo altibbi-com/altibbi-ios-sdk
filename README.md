@@ -139,6 +139,7 @@ Create and manage consultations using our suite of functions:
 | createConsultation  | consultation                        |
 | uploadMedia         | jsonFile, type                      |
 | getConsultationInfo | id                                  |
+| getConsultationAvailableShifts | id, date (YYYY-MM-DD)      |
 | getLastConsultation |                                     |
 | getConsultationList | id (optional userId), page, perPage |
 | deleteConsultation  | id                                  |
@@ -148,7 +149,13 @@ Create and manage consultations using our suite of functions:
 ```sh
 import AltibbiTelehealth
 
-let consultation = Consultation(userId: intId, question: questionBody!, medium: medium, mediaIds: mediaIds)
+let consultation = Consultation(
+    userId: intId,
+    question: questionBody!,
+    medium: medium,
+    mediaIds: mediaIds,
+    scheduledTo: "2026-03-20 10:00:00" // Optional, format: YYYY-MM-DD HH:00:00
+)
 ApiService.createConsultation(consultation: consultation, completion: {createdConsultation, failure, error in
     // Handle createdConsultation as a Consultation object
 })
@@ -185,6 +192,15 @@ ApiService.getConsultationList(userId: filterId, page: 1, perPage: 20, completio
 // Without filteration
 ApiService.getConsultationList(page: 1, perPage: 20, completion: {list, failure, error in
     // Handle list as an array of Consultation object
+})
+```
+
+#### getConsultationAvailableShifts
+```sh
+import AltibbiTelehealth
+
+ApiService.getConsultationAvailableShifts(id: 331, date: "2025-01-12", completion: {availableShifts, failure, error in
+    // availableShifts?.shifts contains the list of available slots
 })
 ```
 
