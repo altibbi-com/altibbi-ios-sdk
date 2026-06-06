@@ -344,7 +344,7 @@ public struct ApiService {
 
     public static func getTranscription(id: Int, completion: @escaping (Transcription?, Data?, Error?) -> Void) -> Void {
         if let httpRequest = NetworkRequest.prepareRequest(
-            link: "/consultations/\(id)/getTranscription",
+            link: "/consultations/\(id)/transcription",
             method: "GET",
             params: [:],
             jsonBody: nil
@@ -406,6 +406,64 @@ public struct ApiService {
         }
     }
 
+
+    // MARK: - Sina AI API
+
+    public static func createSinaSession(completion: @escaping (SinaSession?, Data?, Error?) -> Void) {
+        guard let request = NetworkRequest.prepareSinaRequest(endpoint: "chats", method: "POST", jsonBody: "{}".data(using: .utf8)) else {
+            completion(nil, nil, nil); return
+        }
+        NetworkRequest.sendApiRequest(request, expectedType: SinaSession.self, completion: completion)
+    }
+
+    public static func sendSinaMessage(sessionId: String, text: String, mediaId: String? = nil, completion: @escaping (SinaResponse?, Data?, Error?) -> Void) {
+        var body: [String: Any] = ["text": text]
+        if let mediaId = mediaId { body["media_id"] = mediaId }
+        guard let jsonBody = try? JSONSerialization.data(withJSONObject: body),
+              let request = NetworkRequest.prepareSinaRequest(endpoint: "chats/\(sessionId)/messages", method: "POST", jsonBody: jsonBody) else {
+            completion(nil, nil, nil); return
+        }
+        NetworkRequest.sendApiRequest(request, expectedType: SinaResponse.self, completion: completion)
+    }
+
+    public static func getSinaChatMessages(sessionId: String, page: Int = 1, perPage: Int = 20, completion: @escaping ([SinaMessage]?, Data?, Error?) -> Void) {
+        let params: [String: Any] = ["sort": "-id", "page": page, "per-page": perPage]
+        guard let request = NetworkRequest.prepareSinaRequest(endpoint: "chats/\(sessionId)/messages", method: "GET", params: params) else {
+            completion(nil, nil, nil); return
+        }
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else { completion(nil, nil, error); return }
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode >= 400 {
+                completion(nil, data, nil); return
+            }
+            if let page = try? JSONDecoder().decode(SinaMessagesPage.self, from: data) {
+                completion(page.data, nil, nil)
+            } else {
+                completion(nil, data, nil)
+            }
+        }.resume()
+    }
+
+    public static func uploadSinaMedia(data: Data, type: String, completion: @escaping (Media?, Data?, Error?) -> Void) {
+        let boundary = "Boundary-\(UUID().uuidString)"
+        let normalizedType = type.lowercased()
+        let (ext, contentType): (String, String) = {
+            switch normalizedType {
+            case "jpg", "jpeg": return ("jpg", "image/jpeg")
+            case "png": return ("png", "image/png")
+            case "pdf": return ("pdf", "application/pdf")
+            default: return ("bin", "application/octet-stream")
+            }
+        }()
+        let fileName = "file-\(UUID().uuidString).\(ext)"
+        let fileData = NetworkRequest.fileToData(jsonFile: data, name: "file", fileName: fileName, boundary: boundary, type: contentType)
+        guard let request = NetworkRequest.prepareSinaRequest(endpoint: "media", method: "POST", fileBoundary: boundary) else {
+            completion(nil, nil, nil); return
+        }
+        var mutableRequest = request
+        mutableRequest.httpBody = fileData
+        NetworkRequest.sendApiRequest(mutableRequest, expectedType: Media.self, completion: completion)
+    }
 
     public static func getArticlesList(subcategoryIds: [Int], page: Int, perPage: Int, completion: @escaping ([Article]?, Data?, Error?) -> Void) -> Void {
         let requestParams: Dictionary<String, Any> = [

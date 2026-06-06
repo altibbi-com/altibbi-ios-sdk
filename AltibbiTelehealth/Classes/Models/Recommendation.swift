@@ -60,6 +60,8 @@ public struct RecommendationFdaDrug: Codable {
     private(set) public var relationWithFood: String?
     private(set) public var specialInstructions: String?
     private(set) public var routeOfAdministration: String?
+    private(set) public var registrationNumber: String?
+    // No CodingKeys: all fields use their Swift camelCase name as JSON key (API returns camelCase)
 }
 
 public struct RecommendationICD10: Codable {

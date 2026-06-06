@@ -152,3 +152,84 @@ public struct Article: Codable {
         case url
     }
 }
+
+// MARK: - Sina AI Models
+
+public class SinaSession: Codable {
+    public var id: String?
+    public var createdAt: String?
+    public var updatedAt: String?
+    public var videoConfig: VoipConfig?
+    public var voipConfig: VoipConfig?
+
+    public init() {}
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+        case videoConfig = "video_config"
+        case voipConfig = "voip_config"
+    }
+}
+
+public struct SinaLink: Codable {
+    public var url: String?
+    public var brief: String?
+}
+
+public struct SinaMessageExtra: Codable {
+    public var generalAnswer: String?
+
+    private enum CodingKeys: String, CodingKey {
+        case generalAnswer = "general_answer"
+    }
+}
+
+public struct SinaMessageData: Codable {
+    public var contentType: String?
+    public var foundInRag: Bool?
+    public var links: [SinaLink]?
+    public var extra: SinaMessageExtra?
+
+    private enum CodingKeys: String, CodingKey {
+        case contentType = "content_type"
+        case foundInRag = "found_in_rag"
+        case links
+        case extra
+    }
+}
+
+public struct SinaMessage: Codable {
+    public var id: Int?
+    public var sender: String?
+    public var text: String?
+    public var chatId: String?
+    public var createdAt: String?
+    public var updatedAt: String?
+    public var data: SinaMessageData?
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case sender
+        case text
+        case chatId = "chat_id"
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+        case data
+    }
+}
+
+public struct SinaMessagesPage: Codable {
+    public var data: [SinaMessage]?
+}
+
+public struct SinaResponse: Codable {
+    public var userMessage: SinaMessage?
+    public var sinaMessage: SinaMessage?
+
+    private enum CodingKeys: String, CodingKey {
+        case userMessage = "user_message"
+        case sinaMessage = "sina_message"
+    }
+}

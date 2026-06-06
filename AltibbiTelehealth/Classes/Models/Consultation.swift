@@ -64,6 +64,7 @@ public class Consultation: Codable {
     private(set) public var createdAt: String?
     private(set) public var updatedAt: String?
     private(set) public var closedAt: String?
+    private(set) public var acceptedAt: String?
     private(set) public var user: User?
     private(set) public var parentConsultation: Consultation?
     private(set) public var consultations: [Consultation]?
@@ -105,6 +106,7 @@ public class Consultation: Codable {
         case createdAt = "created_at"
         case updatedAt = "updated_at"
         case closedAt = "closed_at"
+        case acceptedAt = "accepted_at"
         case user = "user"
         case parentConsultation = "parentConsultation"
         case consultations = "consultations"

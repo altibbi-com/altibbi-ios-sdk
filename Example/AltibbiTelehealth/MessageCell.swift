@@ -1,23 +1,148 @@
-//
-//  MessageCell.swift
-//  AltibbiTelehealth_Example
-//
-//  Created by Mahmoud Johar on 26/12/2023.
-//  Copyright © 2023 CocoaPods. All rights reserved.
-//
-
 import UIKit
 import SendbirdChatSDK
 
 class MessageCell: UITableViewCell {
 
-    @IBOutlet weak var meessageContainer: UIView!
-    @IBOutlet weak var messageLabel: UILabel!
+    private let avatarView = UIImageView()
+    private let bubbleView = UIView()
+    private let messageLabel = UILabel()
+    private let messageImageView = UIImageView()
+    private let timeLabel = UILabel()
 
-    func configure(with message: BaseMessage) {
-        messageLabel.text = message.message
-        messageLabel.textAlignment = .right
-        meessageContainer.layer.cornerRadius = 10.0
-        meessageContainer.backgroundColor = UIColor.blue.withAlphaComponent(0.1)
+    private var imageHeightConstraint: NSLayoutConstraint!
+    private var imageWidthConstraint: NSLayoutConstraint!
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .clear
+        selectionStyle = .none
+        setupUI()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
+    }
+
+    private func setupUI() {
+        avatarView.translatesAutoresizingMaskIntoConstraints = false
+        avatarView.backgroundColor = UIColor(hex: "#F0F0F0")
+        avatarView.layer.cornerRadius = 18
+        avatarView.clipsToBounds = true
+        avatarView.contentMode = .scaleAspectFill
+        contentView.addSubview(avatarView)
+
+        bubbleView.translatesAutoresizingMaskIntoConstraints = false
+        bubbleView.backgroundColor = .white
+        bubbleView.layer.cornerRadius = 16
+        bubbleView.layer.borderWidth = 1
+        bubbleView.layer.borderColor = UIColor(hex: "#EAEAEA").cgColor
+        bubbleView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+        contentView.addSubview(bubbleView)
+
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        messageLabel.font = .systemFont(ofSize: 16)
+        messageLabel.textColor = AppColors.text
+        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = .left
+        bubbleView.addSubview(messageLabel)
+
+        messageImageView.translatesAutoresizingMaskIntoConstraints = false
+        messageImageView.contentMode = .scaleAspectFill
+        messageImageView.clipsToBounds = true
+        messageImageView.layer.cornerRadius = 14
+        messageImageView.isHidden = true
+        bubbleView.addSubview(messageImageView)
+
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        timeLabel.font = .systemFont(ofSize: 11)
+        timeLabel.textColor = AppColors.gray
+        contentView.addSubview(timeLabel)
+
+        imageHeightConstraint = messageImageView.heightAnchor.constraint(equalToConstant: 150)
+        imageWidthConstraint = messageImageView.widthAnchor.constraint(equalToConstant: 200)
+
+        NSLayoutConstraint.activate([
+            avatarView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            avatarView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            avatarView.widthAnchor.constraint(equalToConstant: 36),
+            avatarView.heightAnchor.constraint(equalToConstant: 36),
+
+            bubbleView.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: 8),
+            bubbleView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            bubbleView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -60),
+
+            messageLabel.topAnchor.constraint(equalTo: bubbleView.topAnchor, constant: 12),
+            messageLabel.leadingAnchor.constraint(equalTo: bubbleView.leadingAnchor, constant: 12),
+            messageLabel.trailingAnchor.constraint(equalTo: bubbleView.trailingAnchor, constant: -12),
+            messageLabel.bottomAnchor.constraint(equalTo: bubbleView.bottomAnchor, constant: -12),
+
+            messageImageView.topAnchor.constraint(equalTo: bubbleView.topAnchor, constant: 4),
+            messageImageView.leadingAnchor.constraint(equalTo: bubbleView.leadingAnchor, constant: 4),
+            messageImageView.trailingAnchor.constraint(equalTo: bubbleView.trailingAnchor, constant: -4),
+            messageImageView.bottomAnchor.constraint(equalTo: bubbleView.bottomAnchor, constant: -4),
+
+            timeLabel.leadingAnchor.constraint(equalTo: bubbleView.leadingAnchor, constant: 4),
+            timeLabel.topAnchor.constraint(equalTo: bubbleView.bottomAnchor, constant: 4),
+            timeLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
+        ])
+    }
+
+    func configure(with message: BaseMessage, doctorAvatar: String? = nil) {
+        let text = message.message
+        if isImageUrl(text) {
+            messageLabel.isHidden = true
+            messageImageView.isHidden = false
+            imageHeightConstraint.isActive = true
+            imageWidthConstraint.isActive = true
+            loadImage(text)
+        } else {
+            messageLabel.isHidden = false
+            messageImageView.isHidden = true
+            imageHeightConstraint.isActive = false
+            imageWidthConstraint.isActive = false
+
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = 4
+            messageLabel.attributedText = NSAttributedString(
+                string: text,
+                attributes: [.paragraphStyle: style,
+                             .font: UIFont.systemFont(ofSize: 16),
+                             .foregroundColor: AppColors.text]
+            )
+        }
+
+        let date = Date(timeIntervalSince1970: Double(message.createdAt) / 1000)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        timeLabel.text = formatter.string(from: date)
+
+        if let urlStr = doctorAvatar, let url = URL(string: urlStr) {
+            loadAvatar(url: url)
+        } else {
+            avatarView.image = nil
+        }
+    }
+
+    private func isImageUrl(_ url: String) -> Bool {
+        let path = url.trimmingCharacters(in: .whitespaces).split(separator: "?").first.map(String.init) ?? ""
+        let lower = path.lowercased()
+        return lower.hasSuffix(".jpg") || lower.hasSuffix(".jpeg") || lower.hasSuffix(".png")
+            || lower.hasSuffix(".gif") || lower.hasSuffix(".heic") || lower.hasSuffix(".webp")
+    }
+
+    private func loadImage(_ urlStr: String) {
+        guard let url = URL(string: urlStr.trimmingCharacters(in: .whitespaces)) else { return }
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+            guard let data = data, let img = UIImage(data: data) else { return }
+            DispatchQueue.main.async { self?.messageImageView.image = img }
+        }.resume()
+    }
+
+    private func loadAvatar(url: URL) {
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+            guard let data = data, let img = UIImage(data: data) else { return }
+            DispatchQueue.main.async { self?.avatarView.image = img }
+        }.resume()
     }
 }

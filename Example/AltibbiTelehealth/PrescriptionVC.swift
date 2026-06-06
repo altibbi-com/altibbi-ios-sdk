@@ -1,11 +1,3 @@
-//
-//  PrescriptionVC.swift
-//  AltibbiTelehealth_Example
-//
-//  Created by Mahmoud Johar on 24/12/2023.
-//  Copyright © 2023 CocoaPods. All rights reserved.
-//
-
 import UIKit
 import Foundation
 import PDFKit
@@ -13,19 +5,24 @@ import PDFKit
 class PrescriptionVC: UIViewController {
 
     var receivedData: URL?
-    var pdfView: PDFView!
+    private var pdfView: PDFView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if receivedData != nil {
-            DispatchQueue.main.async {
-                self.pdfView = PDFView(frame: self.view.bounds)
-                self.view.addSubview(self.pdfView)
-                if let pdfDocument = PDFDocument(url: self.receivedData!) {
-                    self.pdfView.document = pdfDocument
-                }
-            }
-        }
+        title = "Prescription"
+        view.backgroundColor = AppColors.background
+        setupPDFView()
     }
 
+    private func setupPDFView() {
+        pdfView = PDFView(frame: view.bounds)
+        pdfView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        pdfView.backgroundColor = AppColors.background
+        pdfView.autoScales = true
+        view.addSubview(pdfView)
+
+        if let url = receivedData, let document = PDFDocument(url: url) {
+            pdfView.document = document
+        }
+    }
 }

@@ -1,527 +1,334 @@
-//
-//  ConsultationVC.swift
-//  AltibbiTelehealth_Example
-//
-//  Created by Mahmoud Johar on 24/12/2023.
-//  Copyright © 2023 CocoaPods. All rights reserved.
-//
-
 import UIKit
-import Foundation
 import AltibbiTelehealth
 import MobileCoreServices
 
+// MARK: - ConsultationVC
 
 class ConsultationVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIDocumentPickerDelegate {
 
-    @IBOutlet weak var questionField: UITextView!
-    @IBOutlet weak var chatOption: UIButton!
-    @IBOutlet weak var gsmOption: UIButton!
-    @IBOutlet weak var videoOption: UIButton!
-    @IBOutlet weak var voipOption: UIButton!
-    var medium = ""
-    @IBOutlet weak var userIdField: UITextField!
-    var mediaIds: [String] = []
-    @IBOutlet weak var deleteIdField: UITextField!
-    @IBOutlet weak var viewIdField: UITextField!
-    @IBOutlet weak var prescriptionIdField: UITextField!
-    @IBOutlet weak var listFilterField: UITextField!
-    private var selectedFollowUpConsultationId: Int?
-    private var selectedFollowUpShift: String?
+    // MARK: Scroll
+    private let scrollView  = UIScrollView()
+    private let contentView = UIView()
 
-    public func showAlert(title: String, message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default) { (_) in }
-        alertController.addAction(okAction)
-        present(alertController, animated: true, completion: nil)
-    }
+    // MARK: New Consultation
+    private let mediumRadio   = RadioGroupView(title: "Select Medium", options: ["chat", "gsm", "video", "voip"])
+    private let userIdField   = AppTextFieldView(label: "User ID", placeholder: "Enter User ID", keyboardType: .numberPad)
+    private let questionField = AppTextViewField(label: "Question", placeholder: "Medical consultation question (min 10 chars)…")
+    private let attachBtn     = AppButton(title: "Attach Media (Optional)", variant: .secondary)
+    private let previewImage  = UIImageView()
+    private let removeMediaBtn = UIButton(type: .system)
+    private let uploadingIndicator = UIActivityIndicatorView(style: .medium)
+    private let createBtn     = AppButton(title: "Create Consultation")
+    private let goActiveBtn   = AppButton(title: "Go to Active Consultation", variant: .secondary)
+    private let createFeedback = FeedbackView()
 
-    private func todayDateString() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        return formatter.string(from: Date())
-    }
-
-    private func shiftValue(from shift: ConsultationAvailableShift) -> String? {
-        if let value = normalizedScheduledTo(shift.fullDate) {
-            return value
-        }
-        if let value = normalizedScheduledTo(shift.startAt) {
-            return value
-        }
-        if let value = normalizedScheduledTo(shift.startsAt) {
-            return value
-        }
-        if let value = normalizedScheduledTo(shift.value) {
-            return value
-        }
-        if let value = normalizedScheduledTo(shift.from) {
-            return value
-        }
-        return nil
-    }
-
-    private func normalizedScheduledTo(_ rawValue: String?) -> String? {
-        guard let rawValue = rawValue?.trimmingCharacters(in: .whitespacesAndNewlines), !rawValue.isEmpty else {
-            return nil
-        }
-
-        if rawValue.contains("-") && rawValue.contains(":") {
-            return rawValue
-        }
-
-        if let hour = Int(rawValue), hour >= 0, hour <= 23 {
-            return String(format: "%@ %02d:00:00", todayDateString(), hour)
-        }
-        let parts = rawValue.split(separator: ":").map(String.init)
-        if parts.count == 2,
-           let hour = Int(parts[0]), let minute = Int(parts[1]),
-           hour >= 0, hour <= 23, minute >= 0, minute <= 59 {
-            return String(format: "%@ %02d:%02d:00", todayDateString(), hour, minute)
-        }
-
-        return rawValue
-    }
-
-    private func shiftDisplayText(_ shift: ConsultationAvailableShift) -> String {
-        let fromValue = shift.from ?? shift.startAt ?? shift.startsAt ?? shift.value ?? "-"
-        let toValue = shift.to ?? shift.endAt ?? shift.endsAt
-        if let toValue = toValue, !toValue.isEmpty {
-            return "\(fromValue) -> \(toValue)"
-        }
-        return fromValue
-    }
-
-    private func presentShiftPicker(consultationId: Int, shifts: [ConsultationAvailableShift]) {
-        let alert = UIAlertController(
-            title: "Available Shifts",
-            message: "Choose a shift to create a follow-up consultation.",
-            preferredStyle: .actionSheet
-        )
-
-        for shift in shifts {
-            let title = shiftDisplayText(shift)
-            alert.addAction(UIAlertAction(title: title, style: .default, handler: { _ in
-                self.selectedFollowUpConsultationId = consultationId
-                self.selectedFollowUpShift = self.shiftValue(from: shift)
-                DispatchQueue.main.async {
-                    self.showAlert(
-                        title: "Shift Selected",
-                        message: "Follow-up will be created for consultation #\(consultationId) at \(self.selectedFollowUpShift ?? title)."
-                    )
-                }
-            }))
-        }
-
-        alert.addAction(UIAlertAction(title: "Clear Follow-Up Selection", style: .destructive, handler: { _ in
-            self.selectedFollowUpConsultationId = nil
-            self.selectedFollowUpShift = nil
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-
-        if let popover = alert.popoverPresentationController {
-            popover.sourceView = self.view
-            popover.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.maxY - 1, width: 0, height: 0)
-            popover.permittedArrowDirections = []
-        }
-
-        DispatchQueue.main.async {
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
+    // MARK: State
+    private var mediaId: String?
+    private var previewUri: String?
+    private var isUploading = false
+    private var isCreating  = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        questionField.layer.borderColor = UIColor.gray.cgColor
-        questionField.layer.borderWidth = 1.0
-        questionField.layer.cornerRadius = 5.0
-        questionField.isScrollEnabled = false
+        title = "Consultation"
+        view.backgroundColor = AppColors.background
+        setupScrollView()
+        setupContent()
+        setupKeyboardDismiss()
 
-        if let scrollView = view as? UIScrollView {
-            scrollView.isScrollEnabled = true
-            scrollView.alwaysBounceVertical = true
-            scrollView.keyboardDismissMode = .onDrag
-        }
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+
+        fetchMainUserId()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        updateScrollContentSize()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchMainUserId()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        updateScrollContentSize()
-    }
+    deinit { NotificationCenter.default.removeObserver(self) }
 
-    private func updateScrollContentSize() {
-        guard let scrollView = view as? UIScrollView else { return }
-        scrollView.layoutIfNeeded()
-
-        let contentHeight = scrollView.subviews
-            .map { $0.frame.maxY }
-            .max() ?? scrollView.bounds.height
-        let bottomPadding: CGFloat = 32
-        let finalHeight = max(contentHeight + bottomPadding, scrollView.bounds.height + 1)
-        scrollView.contentSize = CGSize(width: scrollView.bounds.width, height: finalHeight)
-    }
-
-    func showFilePicker() {
-        let documentPicker = UIDocumentPickerViewController(documentTypes: [kUTTypePDF as String], in: .import)
-        documentPicker.delegate = self
-        present(documentPicker, animated: true, completion: nil)
-    }
-
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        guard let fileURL = urls.first else { return }
-
-        print("File Extension: \(fileURL.pathExtension)")
-        if fileURL.pathExtension.lowercased() == "pdf" {
-            print("File Selected: PDF")
-            do {
-                let pdfData = try Data(contentsOf: fileURL)
-                handleFileUpload(data: pdfData, type: "pdf")
-            } catch {
-                DispatchQueue.main.async {
-                    self.showAlert(title: "Convert PDF" , message: "\(error)")
-                }
-                print("Error converting PDF to Data: \(error)")
-            }
-        } else {
+    private func fetchMainUserId() {
+        ApiService.getUsers(page: 1, perPage: 1) { [weak self] users, _, error in
             DispatchQueue.main.async {
-                self.showAlert(title: "PDF" , message: "Selected File is Not PDF")
+                guard let self else { return }
+                if let id = users?.first?.id {
+                    self.userIdField.text = "\(id)"
+                } else {
+                    self.createFeedback.show(message: "Failed to auto-fill User ID: \(error?.localizedDescription ?? "no users found")", type: .error)
+                }
             }
-            print("File Selected: Not PDF")
         }
     }
 
-    func showImagePicker() {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary
+    // MARK: - Scroll Setup
 
-        present(imagePicker, animated: true, completion: nil)
+    private func setupScrollView() {
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.alwaysBounceVertical = true
+        view.addSubview(scrollView)
+
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+        ])
+    }
+
+    private func setupContent() {
+        let outerStack = UIStackView()
+        outerStack.translatesAutoresizingMaskIntoConstraints = false
+        outerStack.axis    = .vertical
+        outerStack.spacing = AppLayout.spacing
+        contentView.addSubview(outerStack)
+
+        NSLayoutConstraint.activate([
+            outerStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: AppLayout.padding),
+            outerStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.padding),
+            outerStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.padding),
+            outerStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.padding),
+        ])
+
+        outerStack.addArrangedSubview(buildNewConsultationCard())
+    }
+
+    // MARK: - Card Builders
+
+    private func buildNewConsultationCard() -> UIView {
+        let card = AppCardView()
+        let stack = cardStack()
+        card.addSubview(stack)
+        pinStack(stack, to: card)
+
+        let title = SectionTitleLabel("New Consultation")
+        let divider = SectionDivider()
+        stack.addArrangedSubview(title)
+        stack.addArrangedSubview(divider)
+        stack.addArrangedSubview(mediumRadio)
+        stack.addArrangedSubview(userIdField)
+        stack.addArrangedSubview(questionField)
+
+        // Media container
+        let mediaContainer = buildMediaContainer()
+        stack.addArrangedSubview(mediaContainer)
+
+        stack.addArrangedSubview(createFeedback)
+        stack.addArrangedSubview(createBtn)
+        stack.addArrangedSubview(goActiveBtn)
+
+        createBtn.addTarget(self, action: #selector(submitConsultation), for: .touchUpInside)
+        goActiveBtn.addTarget(self, action: #selector(goToActiveConsultation), for: .touchUpInside)
+
+        return card
+    }
+
+    private func buildMediaContainer() -> UIView {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+
+        // Attach button (default state)
+        attachBtn.translatesAutoresizingMaskIntoConstraints = true
+        attachBtn.addTarget(self, action: #selector(pickMedia), for: .touchUpInside)
+        container.addSubview(attachBtn)
+        NSLayoutConstraint.activate([
+            attachBtn.topAnchor.constraint(equalTo: container.topAnchor),
+            attachBtn.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            attachBtn.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+        ])
+
+        // Uploading indicator
+        uploadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        uploadingIndicator.color = AppColors.primary
+        uploadingIndicator.hidesWhenStopped = true
+        container.addSubview(uploadingIndicator)
+        NSLayoutConstraint.activate([
+            uploadingIndicator.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            uploadingIndicator.topAnchor.constraint(equalTo: container.topAnchor, constant: 12),
+        ])
+
+        // Preview image
+        previewImage.translatesAutoresizingMaskIntoConstraints = false
+        previewImage.contentMode = .scaleAspectFill
+        previewImage.clipsToBounds = true
+        previewImage.layer.cornerRadius = 12
+        previewImage.backgroundColor = AppColors.lightGray
+        previewImage.isHidden = true
+        container.addSubview(previewImage)
+        NSLayoutConstraint.activate([
+            previewImage.topAnchor.constraint(equalTo: container.topAnchor),
+            previewImage.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            previewImage.widthAnchor.constraint(equalToConstant: 100),
+            previewImage.heightAnchor.constraint(equalToConstant: 100),
+        ])
+
+        // Remove badge
+        removeMediaBtn.translatesAutoresizingMaskIntoConstraints = false
+        removeMediaBtn.setTitle("×", for: .normal)
+        removeMediaBtn.titleLabel?.font = .systemFont(ofSize: 16, weight: .black)
+        removeMediaBtn.setTitleColor(.white, for: .normal)
+        removeMediaBtn.backgroundColor = AppColors.error
+        removeMediaBtn.layer.cornerRadius = 12
+        removeMediaBtn.isHidden = true
+        removeMediaBtn.addTarget(self, action: #selector(removeMedia), for: .touchUpInside)
+        container.addSubview(removeMediaBtn)
+        NSLayoutConstraint.activate([
+            removeMediaBtn.topAnchor.constraint(equalTo: previewImage.topAnchor, constant: -8),
+            removeMediaBtn.trailingAnchor.constraint(equalTo: previewImage.trailingAnchor, constant: 8),
+            removeMediaBtn.widthAnchor.constraint(equalToConstant: 24),
+            removeMediaBtn.heightAnchor.constraint(equalToConstant: 24),
+        ])
+
+        // Container height anchors
+        let normalHeight = container.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight)
+        normalHeight.isActive = true
+
+        attachBtn.heightAnchor.constraint(equalToConstant: AppLayout.buttonHeight).isActive = true
+        container.heightAnchor.constraint(greaterThanOrEqualToConstant: AppLayout.buttonHeight).isActive = false
+
+        return container
+    }
+
+    // MARK: - Helpers
+
+    private func cardStack() -> UIStackView {
+        let s = UIStackView()
+        s.translatesAutoresizingMaskIntoConstraints = false
+        s.axis = .vertical; s.spacing = AppLayout.spacing
+        return s
+    }
+
+    private func pinStack(_ stack: UIStackView, to card: UIView) {
+        NSLayoutConstraint.activate([
+            stack.topAnchor.constraint(equalTo: card.topAnchor, constant: AppLayout.cardPadding),
+            stack.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: AppLayout.cardPadding),
+            stack.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -AppLayout.cardPadding),
+            stack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -AppLayout.cardPadding),
+        ])
+    }
+
+    // MARK: - Media
+
+    @objc private func pickMedia() {
+        let picker = UIImagePickerController()
+        picker.delegate = self; picker.sourceType = .photoLibrary
+        present(picker, animated: true)
     }
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        picker.dismiss(animated: true, completion: nil)
-
-        if let pickedImage = info[.originalImage] as? UIImage {
-            print("Image: \(String(describing: pickedImage))")
-            if let imageData = pickedImage.jpegData(compressionQuality: 0.5) {
-                handleFileUpload(data: imageData, type: "img")
-            }
-        }
-    }
-
-    func handleFileUpload(data: Data, type: String) -> Void {
-        ApiService.uploadMedia(jsonFile: data, type: type, completion: {media, failure, error in
-            if let error = error {
-                print("Data Error: \(String(describing: error))")
-            } else if let failure = failure {
-                ResponseFailure.printJsonData(failure)
-            } else {
-                if let media = media {
-                    self.mediaIds.append(media.id!)
-                    DispatchQueue.main.async {
-                        self.showAlert(title: "Upload", message: "File Uploaded Successfully")
-                    }
-                    print("Media IDs: \(String(describing: self.mediaIds))")
-                }
-            }
-        })
-    }
-
-    @IBAction func mediumOptionSelected(_ sender: UIButton?) {
-        chatOption.setImage(UIImage(systemName: "circlebadge"), for: .normal)
-        gsmOption.setImage(UIImage(systemName: "circlebadge"), for: .normal)
-        videoOption.setImage(UIImage(systemName: "circlebadge"), for: .normal)
-        voipOption.setImage(UIImage(systemName: "circlebadge"), for: .normal)
-        medium = ""
-        if sender != nil {
-            sender!.setImage(UIImage(systemName: "circle.inset.filled"), for: .normal)
-            let mediumLabel = sender!.titleLabel?.text?.lowercased()
-            medium = mediumLabel!.trimmingCharacters(in: .whitespacesAndNewlines)
-            print("Medium Selected: \(mediumLabel!)")
-        }
-    }
-    @IBAction func addFileClicked(_ sender: UIButton) {
-        if sender.titleLabel!.text == "Add PDF" {
-            showFilePicker()
-        } else {
-            showImagePicker()
-        }
-    }
-    @IBAction func createConsultation(_ sender: Any) {
-        let questionBody = questionField.text
-        let userId = userIdField.text
-        if questionBody!.count == 0 {
-            questionField.layer.borderColor = UIColor.red.cgColor
-            questionField.layer.borderWidth = 1.0
-            questionField.layer.cornerRadius = 5.0
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                self.questionField.layer.borderColor = UIColor.gray.cgColor
-                self.questionField.layer.borderWidth = 1.0
-                self.questionField.layer.cornerRadius = 5.0
-            }
-            return
-        }
-        if questionBody!.count < 11 {
-            self.showAlert(title: "Question Body", message: "Should be more than 11")
-            return
-        }
-        if medium.count == 0 {
-            self.showAlert(title: "Consultation Medium", message: "Select Medium")
-            return
-        }
-        if userId!.count == 0 {
-            self.showAlert(title: "User ID", message: "Insert User ID")
-            return
-        }
-        if let intId = Int(userId!) {
-            let consultation = Consultation(
-                userId: intId,
-                question: questionBody!,
-                medium: medium,
-                mediaIds: mediaIds,
-                scheduledTo: selectedFollowUpShift,
-                parentConsultationId: selectedFollowUpConsultationId
-            )
-            ApiService.createConsultation(consultation: consultation, completion: {createdConsultation, failure, error in
-                if let error = error {
-                    print("Data Error: \(String(describing: error))")
-                } else if let failure = failure {
-                    ResponseFailure.printJsonData(failure)
-                } else {
-                    if let consultation = createdConsultation {
-                        DispatchQueue.main.async {
-                            self.questionField.text = ""
-                            self.mediaIds = []
-                            self.userIdField.text = ""
-                            self.selectedFollowUpConsultationId = nil
-                            self.selectedFollowUpShift = nil
-                            self.mediumOptionSelected(nil)
-                            self.performSegue(withIdentifier: "waitingConsultationSegue", sender: consultation)
-                        }
-                    }
-                }
-            })
-
-        } else {
-            self.showAlert(title: "User ID", message: "Insert Valid User ID")
-        }
-    }
-    @IBAction func deleteClicked(_ sender: Any) {
-        if let deleteId = deleteIdField.text, deleteId.count > 0, let intId = Int(deleteId) {
-            ApiService.deleteConsultation(id: intId, completion: {success, failure, error in
-                if let error = error {
-                    print("Data Error: \(String(describing: error))")
-                } else if let failure = failure {
-                    ResponseFailure.printJsonData(failure)
-                } else {
-                    if success != nil {
-                        DispatchQueue.main.async {
-                            self.showAlert(title: "Success", message: "Consultation With ID \(deleteId) Deleted Successfully")
-                        }
-                    }
-                }
-            })
-        } else {
+        picker.dismiss(animated: true)
+        guard let image = info[.originalImage] as? UIImage,
+              let data = image.jpegData(compressionQuality: 0.7) else { return }
+        previewImage.image = image
+        showUploadingState(true)
+        ApiService.uploadMedia(jsonFile: data, type: "jpg") { [weak self] media, _, error in
             DispatchQueue.main.async {
-                self.showAlert(title: "Consultation ID", message: "Insert a Valid ID")
-            }
-        }
-    }
-
-    @IBAction func cancelClicked(_ sender: Any) {
-        if let deleteId = deleteIdField.text, deleteId.count > 0, let intId = Int(deleteId) {
-            ApiService.cancelConsultation(id: intId, completion: {cancelledConsultation, failure, error in
-                if let error = error {
-                    print("Data Error: \(String(describing: error))")
-                } else if let failure = failure {
-                    ResponseFailure.printJsonData(failure)
+                self?.showUploadingState(false)
+                if let id = media?.id {
+                    self?.mediaId = id
+                    self?.showPreviewState(true)
                 } else {
-                    if cancelledConsultation != nil {
-                        DispatchQueue.main.async {
-                            self.showAlert(title: "Success", message: "Consultation With ID \(deleteId) Cancelled Successfully")
-                        }
-                    }
+                    self?.createFeedback.show(message: "Failed to upload image.", type: .error)
                 }
-            })
-        } else {
-            DispatchQueue.main.async {
-                self.showAlert(title: "Consultation ID", message: "Insert a Valid ID")
             }
         }
     }
-    @IBAction func getConsultationClicked(_ sender: Any) {
-        if let viewId = viewIdField.text, viewId.count > 0, let intId = Int(viewId) {
-            ApiService.getConsultationInfo(id: intId, completion: {consultation, failure, error in
-                if let error = error {
-                    print("Data Error: \(String(describing: error))")
-                } else if let failure = failure {
-                    ResponseFailure.printJsonData(failure)
+
+    @objc private func removeMedia() {
+        mediaId = nil; previewImage.image = nil
+        showPreviewState(false)
+    }
+
+    private func showUploadingState(_ uploading: Bool) {
+        if uploading {
+            attachBtn.isHidden = true; previewImage.isHidden = true; removeMediaBtn.isHidden = true
+            uploadingIndicator.startAnimating()
+        } else {
+            uploadingIndicator.stopAnimating()
+            if mediaId == nil { attachBtn.isHidden = false }
+        }
+    }
+
+    private func showPreviewState(_ hasMedia: Bool) {
+        attachBtn.isHidden   = hasMedia
+        previewImage.isHidden = !hasMedia
+        removeMediaBtn.isHidden = !hasMedia
+    }
+
+    // MARK: - Submit Consultation
+
+    @objc private func submitConsultation() {
+        let question = questionField.text ?? ""
+        guard question.count >= 10 else {
+            createFeedback.show(message: "Question must be at least 10 characters.", type: .error); return
+        }
+        guard let userIdText = userIdField.text, let userId = Int(userIdText) else {
+            createFeedback.show(message: "Valid User ID is required.", type: .error); return
+        }
+        let medium = mediumRadio.selectedValue
+        guard !medium.isEmpty else {
+            createFeedback.show(message: "Please select a medium.", type: .error); return
+        }
+
+        isCreating = true; createBtn.setLoading(true); createFeedback.hide()
+
+        let consultation = Consultation(
+            userId: userId, question: question, medium: medium,
+            mediaIds: mediaId.map { [$0] },
+            scheduledTo: nil, parentConsultationId: nil
+        )
+        ApiService.createConsultation(consultation: consultation, forceWhiteLabelingPartnerName: "partnerTest") { [weak self] _, _, error in
+            DispatchQueue.main.async {
+                self?.createBtn.setLoading(false); self?.isCreating = false
+                if error != nil {
+                    self?.createFeedback.show(message: "Failed to create consultation.", type: .error)
                 } else {
-                    if let consultation = consultation {
-                        print("Consultation Info: \(String(describing: consultation))")
-                    }
+                    self?.fetchAndNavigateToActive()
                 }
-            })
-        } else {
-            DispatchQueue.main.async {
-                self.showAlert(title: "Consultation ID", message: "Insert a Valid ID")
             }
         }
     }
-    @IBAction func getShiftsClicked(_ sender: Any) {
-        if let viewId = viewIdField.text, viewId.count > 0, let intId = Int(viewId) {
-            let date = "2026-03-25"
-            ApiService.getConsultationAvailableShifts(id: intId, date: date, completion: {availableShifts, failure, error in
-                if let error = error {
-                    print("Available Shifts Error: \(String(describing: error))")
-                } else if let failure = failure {
-                    ResponseFailure.printJsonData(failure)
+
+    @objc private func goToActiveConsultation() { fetchAndNavigateToActive() }
+
+    private func fetchAndNavigateToActive() {
+        ApiService.getLastConsultation { [weak self] consultation, _, _ in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                if let c = consultation, c.status != "closed" {
+                    let waitVC = WaitingVC()
+                    waitVC.consultationInfo = c
+                    self.navigationController?.pushViewController(waitVC, animated: true)
                 } else {
-                    let shifts = availableShifts?.shifts ?? []
-                    print("Available shifts on \(date): \(shifts.count)")
-                    for shift in shifts {
-                        print("Shift value: \(shift.value ?? "-"), from: \(shift.from ?? shift.startAt ?? shift.startsAt ?? "-"), to: \(shift.to ?? shift.endAt ?? shift.endsAt ?? "-")")
-                    }
-                    if shifts.count > 0 {
-                        self.presentShiftPicker(consultationId: intId, shifts: shifts)
-                    } else {
-                        DispatchQueue.main.async {
-                            self.showAlert(title: "Available Shifts", message: "No shifts available for this date.")
-                        }
-                    }
-                }
-            })
-        } else {
-            DispatchQueue.main.async {
-                self.showAlert(title: "Consultation ID", message: "Insert a Valid ID")
-            }
-        }
-    }
-    @IBAction func getListClicked(_ sender: Any) {
-        var filterId: Int? = nil
-        if let id = self.listFilterField.text, id.count > 0, let intId = Int(id) {
-            filterId = intId
-        }
-        ApiService.getConsultationList(userId: filterId, page: 1, perPage: 20, completion: {list, failure, error in
-            if let error = error {
-                print("Data Error: \(String(describing: error))")
-            } else if let failure = failure {
-                ResponseFailure.printJsonData(failure)
-            } else {
-                print("Consultation Count: \(String(describing: list?.count))")
-                if let list = list {
-                    for cons in list {
-                        print("Consultation ID: \(String(describing: cons.consultationId)), Question: \(String(describing: cons.question)), User ID: \(String(describing: cons.userId))")
-                    }
-                }
-            }
-        })
-    }
-    @IBAction func getLastClicked(_ sender: Any) {
-        ApiService.getLastConsultation(completion: {consultation, failure, error in
-            if let error = error {
-                print("Data Error: \(String(describing: error))")
-            } else if let failure = failure {
-                ResponseFailure.printJsonData(failure)
-            } else {
-                if let consultation = consultation {
-                    print("Last Consultation: \(String(describing: consultation))")
-                    if consultation.status == "in_progress" {
-                        DispatchQueue.main.async {
-                            self.performSegue(withIdentifier: "waitingConsultationSegue", sender: consultation)
-                        }
-                    }
-                }
-            }
-        })
-    }
-    @IBAction func getPrescriptionClicked(_ sender: Any) {
-        if let consId = prescriptionIdField.text, consId.count > 0, let intId = Int(consId) {
-            ApiService.getPrescription(id: intId, completion: {pathUrl, failure, error in
-                if let error = error {
-                    print("Data Error: \(String(describing: error))")
-                } else if let failure = failure {
-                    ResponseFailure.printJsonData(failure)
-                } else {
-                    if pathUrl != nil {
-                        print("Success: \(String(describing: pathUrl))")
-                        DispatchQueue.main.async {
-                            self.performSegue(withIdentifier: "viewPrescriptionSegue", sender: pathUrl)
-                        }
-                    }
-                }
-            })
-        } else {
-            DispatchQueue.main.async {
-                self.showAlert(title: "Consultation ID", message: "Insert a Valid ID")
-            }
-        }
-    }
-    @IBAction func closeChat(_ sender: Any) {
-        AltibbiChat.disconnectChat()
-    }
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "waitingConsultationSegue" {
-            if let destVc = segue.destination as? WaitingVC {
-                if let data = sender as? Consultation {
-                    destVc.consultationInfo = data
-                }
-            }
-        }
-        if segue.identifier == "viewPrescriptionSegue" {
-            if let destVc = segue.destination as? PrescriptionVC {
-                if let data = sender as? URL {
-                    destVc.receivedData = data
+                    self.createFeedback.show(message: "No active consultation found.", type: .info)
                 }
             }
         }
     }
 
+    // MARK: - Keyboard
 
-    func attachAsCSV(jsonData: [[String: String]]) {
-        do {
-            let fileName = "attach-consultation-\(Int(Date().timeIntervalSince1970)).csv"
-            let fileManager = FileManager.default
-            let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
-            let documentsDirectory = urls[0]
-            let fileURL = documentsDirectory.appendingPathComponent(fileName)
-
-            var csvContent = ""
-
-            if let headers = jsonData.first?.keys {
-                csvContent.append(headers.joined(separator: ",") + "\n")
-
-                for row in jsonData {
-                    let rowValues = row.values.joined(separator: ",")
-                    csvContent.append(rowValues + "\n")
-                }
-            }
-
-            try csvContent.write(to: fileURL, atomically: true, encoding: .utf8)
-
-            if let csvData = try? Data(contentsOf: fileURL) {
-                ApiService.uploadMedia(jsonFile: csvData, type: "text/csv", completion: { media, failure, error in
-                    if let error = error {
-                        print("Data Error: \(String(describing: error))")
-                    } else if let failure = failure {
-                        ResponseFailure.printJsonData(failure)
-                    } else if let media = media {
-                        DispatchQueue.main.async {
-                            self.mediaIds.append(media.id!)
-                        }
-                        print("Media IDs: \(String(describing: self.mediaIds))")
-                    }
-                })
-            }
-        } catch let error {
-            print("Error writing or uploading CSV file: \(error.localizedDescription)")
+    @objc private func keyboardWillShow(_ n: Notification) {
+        if let info = n.userInfo, let val = info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            scrollView.contentInset.bottom = val.cgRectValue.height
         }
+    }
+
+    @objc private func keyboardWillHide(_ n: Notification) { scrollView.contentInset.bottom = 0 }
+
+    private func setupKeyboardDismiss() {
+        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:)))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
     }
 }

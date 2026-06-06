@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		30998BDE2B383214005E9F25 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30998BDD2B383214005E9F25 /* LoginVC.swift */; };
 		30998BE02B38327A005E9F25 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30998BDF2B38327A005E9F25 /* HomeVC.swift */; };
 		30998BE32B3832FF005E9F25 /* ConsultationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30998BE22B3832FF005E9F25 /* ConsultationVC.swift */; };
 		30998BE52B38338A005E9F25 /* WaitingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30998BE42B38338A005E9F25 /* WaitingVC.swift */; };
@@ -27,11 +26,17 @@
 		972BDF382B3865B10077296E /* VideoConsultationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 972BDF372B3865B10077296E /* VideoConsultationVC.swift */; };
 		976946EF2EF8581800353B67 /* AltibbiTelehealth in Frameworks */ = {isa = PBXBuildFile; productRef = 976946EE2EF8581800353B67 /* AltibbiTelehealth */; };
 		97FC9FDE2EF85D3000BBA0EF /* VonageClientSDKVideo in Frameworks */ = {isa = PBXBuildFile; productRef = 97FC9FDD2EF85D3000BBA0EF /* VonageClientSDKVideo */; };
+		97AABBCC0003000000000003 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 97AABBCC0002000000000002 /* Lottie */; };
+		97AABBCC0005000000000005 /* Lottie in Resources */ = {isa = PBXBuildFile; fileRef = 97AABBCC0004000000000004 /* Lottie */; };
+		97AABBCC0007000000000007 /* SinaHomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97AABBCC0006000000000006 /* SinaHomeVC.swift */; };
+		AA11223344550001AA000001 /* ConsultationListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344550001AA000002 /* ConsultationListVC.swift */; };
+		AA11223344550001AA000003 /* FollowUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344550001AA000004 /* FollowUpVC.swift */; };
+		AA11223344550002AA000001 /* UpdateUserVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344550002AA000002 /* UpdateUserVC.swift */; };
+		AA11223344550002AA000003 /* UserToolsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344550002AA000004 /* UserToolsVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		28E0C1EF559369865B5719FC /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		30998BDD2B383214005E9F25 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		30998BDF2B38327A005E9F25 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		30998BE22B3832FF005E9F25 /* ConsultationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsultationVC.swift; sourceTree = "<group>"; };
 		30998BE42B38338A005E9F25 /* WaitingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingVC.swift; sourceTree = "<group>"; };
@@ -55,8 +60,14 @@
 		91F76571CA1CE9F41A2DFD32 /* Pods_AltibbiTelehealth_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AltibbiTelehealth_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		96C178F1118C76123943E695 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		972BDF372B3865B10077296E /* VideoConsultationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoConsultationVC.swift; sourceTree = "<group>"; };
+		AA11223344550001AA000002 /* ConsultationListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsultationListVC.swift; sourceTree = "<group>"; };
+		AA11223344550001AA000004 /* FollowUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowUpVC.swift; sourceTree = "<group>"; };
+		AA11223344550002AA000002 /* UpdateUserVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUserVC.swift; sourceTree = "<group>"; };
+		AA11223344550002AA000004 /* UserToolsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToolsVC.swift; sourceTree = "<group>"; };
 		AF9FFE1E278492A26E550EBA /* AltibbiTelehealth.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AltibbiTelehealth.podspec; path = ../AltibbiTelehealth.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B63B9403901E9667A21F74CF /* Pods_AltibbiTelehealth_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AltibbiTelehealth_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		97AABBCC0004000000000004 /* Lottie */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Lottie; sourceTree = "<group>"; };
+		97AABBCC0006000000000006 /* SinaHomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinaHomeVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +77,7 @@
 			files = (
 				97FC9FDE2EF85D3000BBA0EF /* VonageClientSDKVideo in Frameworks */,
 				976946EF2EF8581800353B67 /* AltibbiTelehealth in Frameworks */,
+				97AABBCC0003000000000003 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,7 +87,6 @@
 		30998BDA2B38319D005E9F25 /* Main Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				30998BDD2B383214005E9F25 /* LoginVC.swift */,
 				30998BDF2B38327A005E9F25 /* HomeVC.swift */,
 			);
 			name = "Main Controllers";
@@ -87,6 +98,8 @@
 				30998C012B3CB1FE005E9F25 /* MyMessageCell.swift */,
 				30998BFC2B3C32F1005E9F25 /* MessageCell.swift */,
 				30998BE22B3832FF005E9F25 /* ConsultationVC.swift */,
+				AA11223344550001AA000002 /* ConsultationListVC.swift */,
+				AA11223344550001AA000004 /* FollowUpVC.swift */,
 				30998BE42B38338A005E9F25 /* WaitingVC.swift */,
 				30998BE62B383461005E9F25 /* PrescriptionVC.swift */,
 				30998BE82B3834DD005E9F25 /* ChatConsultationVC.swift */,
@@ -99,8 +112,10 @@
 			isa = PBXGroup;
 			children = (
 				30998BEB2B383585005E9F25 /* UserVC.swift */,
-				30998BED2B3835F5005E9F25 /* UserInfoVC.swift */,
 				30998BEF2B383639005E9F25 /* CreateUserVC.swift */,
+				AA11223344550002AA000002 /* UpdateUserVC.swift */,
+				AA11223344550002AA000004 /* UserToolsVC.swift */,
+				30998BED2B3835F5005E9F25 /* UserInfoVC.swift */,
 			);
 			name = "User Controllers";
 			sourceTree = "<group>";
@@ -131,11 +146,13 @@
 				30998BEA2B383571005E9F25 /* User Controllers */,
 				30998BE12B3832A3005E9F25 /* Consultation Controllers */,
 				30998BDA2B38319D005E9F25 /* Main Controllers */,
+				97AABBCC0006000000000006 /* SinaHomeVC.swift */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				30998BFE2B3C3304005E9F25 /* MessageCell.xib */,
 				30998C032B3CB266005E9F25 /* MyMessageCell.xib */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
+				97AABBCC0004000000000004 /* Lottie */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 			);
@@ -210,6 +227,11 @@
 			dependencies = (
 			);
 			name = AltibbiTelehealth_Example;
+			packageProductDependencies = (
+				976946EE2EF8581800353B67 /* AltibbiTelehealth */,
+				97FC9FDD2EF85D3000BBA0EF /* VonageClientSDKVideo */,
+				97AABBCC0002000000000002 /* Lottie */,
+			);
 			productName = AltibbiTelehealth;
 			productReference = 607FACD01AFB9204008FA782 /* AltibbiTelehealth_Example.app */;
 			productType = "com.apple.product-type.application";
@@ -244,6 +266,7 @@
 			packageReferences = (
 				976946ED2EF8581800353B67 /* XCLocalSwiftPackageReference "../" */,
 				97FC9FDC2EF85D3000BBA0EF /* XCRemoteSwiftPackageReference "vonage-video-client-sdk-swift" */,
+				97AABBCC0001000000000001 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = 607FACD11AFB9204008FA782 /* Products */;
 			projectDirPath = "";
@@ -264,6 +287,7 @@
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				30998C052B3CB266005E9F25 /* MyMessageCell.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				97AABBCC0005000000000005 /* Lottie in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,12 +305,16 @@
 				30998BE92B3834DD005E9F25 /* ChatConsultationVC.swift in Sources */,
 				30998BE02B38327A005E9F25 /* HomeVC.swift in Sources */,
 				30998BFD2B3C32F1005E9F25 /* MessageCell.swift in Sources */,
-				30998BDE2B383214005E9F25 /* LoginVC.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				30998BE32B3832FF005E9F25 /* ConsultationVC.swift in Sources */,
+				AA11223344550001AA000001 /* ConsultationListVC.swift in Sources */,
+				AA11223344550001AA000003 /* FollowUpVC.swift in Sources */,
 				972BDF382B3865B10077296E /* VideoConsultationVC.swift in Sources */,
 				30998BEC2B383585005E9F25 /* UserVC.swift in Sources */,
 				30998BEE2B3835F5005E9F25 /* UserInfoVC.swift in Sources */,
+				AA11223344550002AA000001 /* UpdateUserVC.swift in Sources */,
+				AA11223344550002AA000003 /* UserToolsVC.swift in Sources */,
+				97AABBCC0007000000000007 /* SinaHomeVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -507,6 +535,14 @@
 				minimumVersion = 2.32.1;
 			};
 		};
+		97AABBCC0001000000000001 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.4.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -519,6 +555,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 97FC9FDC2EF85D3000BBA0EF /* XCRemoteSwiftPackageReference "vonage-video-client-sdk-swift" */;
 			productName = VonageClientSDKVideo;
+		};
+		97AABBCC0002000000000002 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 97AABBCC0001000000000001 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

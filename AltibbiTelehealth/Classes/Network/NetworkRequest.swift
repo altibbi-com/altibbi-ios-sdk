@@ -156,6 +156,42 @@ struct NetworkRequest {
         print("")
     }
 
+    public static func prepareSinaRequest(endpoint: String, method: String, params: [String: Any] = [:], jsonBody: Data? = nil, fileBoundary: String? = nil) -> URLRequest? {
+        guard let sinaBase = AltibbiService.sinaEndpoint,
+              let token = AltibbiService.token,
+              let host = AltibbiService.baseUrl else { return nil }
+
+        let urlString = "\(sinaBase)/\(endpoint)"
+        guard var urlComponents = URLComponents(string: urlString) else { return nil }
+
+        if !params.isEmpty && method == "GET" {
+            urlComponents.queryItems = params.map { key, value in
+                URLQueryItem(name: key, value: "\(value)")
+            }
+        }
+
+        guard let url = urlComponents.url else { return nil }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = method
+        request.setValue(host, forHTTPHeaderField: "partner-host")
+        request.setValue(token, forHTTPHeaderField: "partner-user-token")
+        request.setValue(AltibbiService.language, forHTTPHeaderField: "accept-language")
+
+        if method == "POST" || method == "PUT" {
+            if let boundary = fileBoundary {
+                request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+            } else {
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                request.setValue("application/json", forHTTPHeaderField: "Accept")
+            }
+            request.httpBody = jsonBody
+        }
+
+        if AltibbiService.enableDebugLog { printCurlCommand(request) }
+        return request
+    }
+
     public static func fileToData(jsonFile: Data, name: String, fileName: String, boundary: String, type: String) -> Data {
         var body = Data()
 

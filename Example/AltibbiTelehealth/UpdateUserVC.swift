@@ -1,54 +1,65 @@
 import UIKit
 import AltibbiTelehealth
 
-class CreateUserVC: UIViewController {
+class UpdateUserVC: UIViewController {
 
     private let scrollView  = UIScrollView()
     private let contentView = UIView()
 
-    // Personal
-    private let nameField    = AppTextFieldView(label: "Name", placeholder: "Full name")
-    private let dobField     = AppTextFieldView(label: "Date of Birth", placeholder: "YYYY-MM-DD")
-    private let genderRadio  = RadioGroupView(title: "Gender", options: ["male", "female"])
-    private let maritalRadio = RadioGroupView(title: "Marital Status", options: ["single", "married", "divorced", "widow"])
+    // Load section
+    private let userIdField  = AppTextFieldView(label: "User ID", placeholder: "Enter User ID", keyboardType: .numberPad)
+    private let loadBtn      = AppButton(title: "Load User", variant: .secondary)
+    private let loadFeedback = FeedbackView()
 
-    // Contact
-    private let emailField       = AppTextFieldView(label: "Email", placeholder: "email@example.com", keyboardType: .emailAddress)
-    private let phoneField       = AppTextFieldView(label: "Phone", placeholder: "Phone Number", keyboardType: .phonePad)
-    private let nationalityField = AppTextFieldView(label: "Nationality Number", placeholder: "Nationality Number")
+    // Edit fields
+    private let nameField         = AppTextFieldView(label: "Name", placeholder: "Full name")
+    private let dobField          = AppTextFieldView(label: "Date of Birth", placeholder: "YYYY-MM-DD")
+    private let genderRadio       = RadioGroupView(title: "Gender", options: ["male", "female"])
+    private let maritalRadio      = RadioGroupView(title: "Marital Status", options: ["single", "married", "divorced", "widow"])
+    private let emailField        = AppTextFieldView(label: "Email", placeholder: "email@example.com", keyboardType: .emailAddress)
+    private let phoneField        = AppTextFieldView(label: "Phone", placeholder: "Phone Number", keyboardType: .phonePad)
+    private let nationalityField  = AppTextFieldView(label: "Nationality Number", placeholder: "Nationality Number")
+    private let insuranceField    = AppTextFieldView(label: "Insurance ID", placeholder: "Insurance ID")
+    private let policyField       = AppTextFieldView(label: "Policy Number", placeholder: "Policy Number")
+    private let tpaCodeField      = AppTextFieldView(label: "TPA Code", placeholder: "TPA Code")
+    private let payerNameField    = AppTextFieldView(label: "Payer Name", placeholder: "Payer Name")
+    private let heightField       = AppTextFieldView(label: "Height (cm)", placeholder: "Height", keyboardType: .decimalPad)
+    private let weightField       = AppTextFieldView(label: "Weight (kg)", placeholder: "Weight", keyboardType: .decimalPad)
+    private let bloodTypeRadio    = RadioGroupView(title: "Blood Type", options: ["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"])
+    private let smokerRadio       = RadioGroupView(title: "Smoker", options: ["no", "yes"])
+    private let alcoholicRadio    = RadioGroupView(title: "Alcoholic", options: ["no", "yes"])
+    private let relationRadio     = RadioGroupView(title: "Relation Type", options: ["personal", "father", "mother", "sister", "brother", "child", "husband", "wife", "other"])
+    private let saveFeedback      = FeedbackView()
+    private let saveBtn           = AppButton(title: "Save Changes")
 
-    // Insurance
-    private let insuranceField = AppTextFieldView(label: "Insurance ID", placeholder: "Insurance ID")
-    private let policyField    = AppTextFieldView(label: "Policy Number", placeholder: "Policy Number")
-    private let tpaCodeField   = AppTextFieldView(label: "TPA Code", placeholder: "TPA Code")
-    private let payerNameField = AppTextFieldView(label: "Payer Name", placeholder: "Payer Name")
-
-    // Medical
-    private let heightField    = AppTextFieldView(label: "Height (cm)", placeholder: "Height", keyboardType: .decimalPad)
-    private let weightField    = AppTextFieldView(label: "Weight (kg)", placeholder: "Weight", keyboardType: .decimalPad)
-    private let bloodTypeRadio = RadioGroupView(title: "Blood Type", options: ["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"])
-    private let smokerRadio    = RadioGroupView(title: "Smoker", options: ["no", "yes"])
-    private let alcoholicRadio = RadioGroupView(title: "Alcoholic", options: ["no", "yes"])
-    private let relationRadio  = RadioGroupView(title: "Relation Type", options: ["personal", "father", "mother", "sister", "brother", "child", "husband", "wife", "other"])
-
-    private let feedbackView = FeedbackView()
-    private let createBtn    = AppButton(title: "Create User")
-
+    private var loadedUserId: Int?
     private var selectedDate: Date = Date()
     private var datePickerOverlay: UIView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Create User"
+        title = "Update User"
         view.backgroundColor = AppColors.background
         setupScrollView()
         setupContent()
+        saveBtn.isEnabled = false
+        saveBtn.alpha = 0.5
         setupKeyboardDismiss()
         NotificationCenter.default.addObserver(self, selector: #selector(kbShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(kbHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+
+        ApiService.getUsers(page: 1, perPage: 1) { [weak self] users, _, _ in
+            DispatchQueue.main.async {
+                guard let self, let id = users?.first?.id else { return }
+                if self.userIdField.text?.isEmpty == false { return }
+                self.userIdField.text = "\(id)"
+            }
+        }
     }
 
     deinit { NotificationCenter.default.removeObserver(self) }
+
+    // MARK: - Scroll
 
     private func setupScrollView() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -69,6 +80,8 @@ class CreateUserVC: UIViewController {
         ])
     }
 
+    // MARK: - Content
+
     private func setupContent() {
         let outer = vstack(spacing: AppLayout.spacing)
         contentView.addSubview(outer)
@@ -79,6 +92,17 @@ class CreateUserVC: UIViewController {
             outer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.padding),
         ])
 
+        // Load card
+        outer.addArrangedSubview(buildCard(title: "Load User", content: {
+            let s = self.vstack()
+            s.addArrangedSubview(self.userIdField)
+            self.loadBtn.addTarget(self, action: #selector(self.loadTapped), for: .touchUpInside)
+            s.addArrangedSubview(self.loadBtn)
+            s.addArrangedSubview(self.loadFeedback)
+            return s
+        }()))
+
+        // Personal
         outer.addArrangedSubview(buildCard(title: "Personal Information", content: {
             let s = self.vstack()
             let dobTap = UITapGestureRecognizer(target: self, action: #selector(self.showDatePicker))
@@ -93,6 +117,7 @@ class CreateUserVC: UIViewController {
             return s
         }()))
 
+        // Contact
         outer.addArrangedSubview(buildCard(title: "Contact Information", content: {
             let s = self.vstack()
             let row = self.hstack()
@@ -103,6 +128,7 @@ class CreateUserVC: UIViewController {
             return s
         }()))
 
+        // Insurance
         outer.addArrangedSubview(buildCard(title: "Insurance Information", content: {
             let s = self.vstack()
             let row = self.hstack()
@@ -116,6 +142,7 @@ class CreateUserVC: UIViewController {
             return s
         }()))
 
+        // Medical
         outer.addArrangedSubview(buildCard(title: "Medical Information", content: {
             let s = self.vstack()
             let row = self.hstack()
@@ -129,9 +156,9 @@ class CreateUserVC: UIViewController {
             return s
         }()))
 
-        outer.addArrangedSubview(feedbackView)
-        createBtn.addTarget(self, action: #selector(createTapped), for: .touchUpInside)
-        outer.addArrangedSubview(createBtn)
+        outer.addArrangedSubview(saveFeedback)
+        saveBtn.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
+        outer.addArrangedSubview(saveBtn)
     }
 
     private func buildCard(title: String, content: UIStackView) -> UIView {
@@ -158,6 +185,91 @@ class CreateUserVC: UIViewController {
     private func hstack() -> UIStackView {
         let s = UIStackView(); s.translatesAutoresizingMaskIntoConstraints = false
         s.axis = .horizontal; s.spacing = 12; s.distribution = .fillEqually; return s
+    }
+
+    // MARK: - Load
+
+    @objc private func loadTapped() {
+        guard let text = userIdField.text, !text.isEmpty, let id = Int(text) else {
+            userIdField.setError("Valid User ID required"); return
+        }
+        loadBtn.setLoading(true); loadFeedback.hide()
+        ApiService.getUser(id: id) { [weak self] user, _, _ in
+            DispatchQueue.main.async {
+                self?.loadBtn.setLoading(false)
+                if let user = user {
+                    self?.loadedUserId = user.id
+                    self?.prefill(user)
+                    self?.loadFeedback.show(message: "Loaded: \(user.name ?? "User #\(id)")", type: .success)
+                    self?.saveBtn.isEnabled = true
+                    self?.saveBtn.alpha = 1.0
+                } else {
+                    self?.loadFeedback.show(message: "User not found. Check the ID.", type: .error)
+                }
+            }
+        }
+    }
+
+    private func prefill(_ u: User) {
+        nameField.text        = u.name
+        dobField.text         = u.dateOfBirth
+        emailField.text       = u.email
+        phoneField.text       = u.phone
+        nationalityField.text = u.nationalityNumber
+        insuranceField.text   = u.insuranceId
+        policyField.text      = u.policyNumber
+        tpaCodeField.text     = u.tpaCode
+        payerNameField.text   = u.payerName
+        heightField.text      = u.height.map { "\($0)" }
+        weightField.text      = u.weight.map { "\($0)" }
+        if let bt = u.bloodType      { bloodTypeRadio.setSelectedValue(bt) }
+        if let s  = u.smoker         { smokerRadio.setSelectedValue(s) }
+        if let a  = u.alcoholic      { alcoholicRadio.setSelectedValue(a) }
+        if let g  = u.gender         { genderRadio.setSelectedValue(g) }
+        if let m  = u.maritalStatus  { maritalRadio.setSelectedValue(m) }
+        if let r  = u.relationType   { relationRadio.setSelectedValue(r) }
+        if let dobStr = u.dateOfBirth {
+            let f = DateFormatter(); f.dateFormat = "yyyy-MM-dd"; f.locale = Locale(identifier: "en_US_POSIX")
+            if let d = f.date(from: dobStr) { selectedDate = d }
+        }
+    }
+
+    // MARK: - Save
+
+    @objc private func saveTapped() {
+        guard let id = loadedUserId else {
+            saveFeedback.show(message: "Load a user first.", type: .error); return
+        }
+        saveBtn.setLoading(true); saveFeedback.hide()
+        var updated = User(id: id)
+        updated.name              = nameField.text
+        updated.email             = emailField.text
+        updated.phone             = phoneField.text
+        updated.dateOfBirth       = dobField.text
+        updated.nationalityNumber = nationalityField.text
+        updated.insuranceId       = insuranceField.text
+        updated.policyNumber      = policyField.text
+        updated.tpaCode           = tpaCodeField.text
+        updated.payerName         = payerNameField.text
+        updated.height            = Double(heightField.text ?? "")
+        updated.weight            = Double(weightField.text ?? "")
+        updated.bloodType         = bloodTypeRadio.selectedValue.isEmpty ? nil : bloodTypeRadio.selectedValue
+        updated.smoker            = smokerRadio.selectedValue
+        updated.alcoholic         = alcoholicRadio.selectedValue
+        updated.gender            = genderRadio.selectedValue
+        updated.maritalStatus     = maritalRadio.selectedValue
+        updated.relationType      = relationRadio.selectedValue
+
+        ApiService.updateUser(id: id, userData: updated) { [weak self] result, _, _ in
+            DispatchQueue.main.async {
+                self?.saveBtn.setLoading(false)
+                if result != nil {
+                    self?.saveFeedback.show(message: "User updated successfully.", type: .success)
+                } else {
+                    self?.saveFeedback.show(message: "Failed to update user. Try again.", type: .error)
+                }
+            }
+        }
     }
 
     // MARK: - Date Picker
@@ -236,64 +348,6 @@ class CreateUserVC: UIViewController {
         let f = DateFormatter(); f.dateFormat = "yyyy-MM-dd"; f.locale = Locale(identifier: "en_US_POSIX")
         dobField.text = f.string(from: selectedDate)
         closeDatePicker()
-    }
-
-    // MARK: - Create
-
-    @objc private func createTapped() {
-        guard let name = nameField.text, !name.isEmpty else {
-            feedbackView.show(message: "Name is required.", type: .error); return
-        }
-        guard let email = emailField.text, !email.isEmpty else {
-            feedbackView.show(message: "Email is required.", type: .error); return
-        }
-        guard let phone = phoneField.text, !phone.isEmpty else {
-            feedbackView.show(message: "Phone number is required.", type: .error); return
-        }
-        guard let dob = dobField.text, !dob.isEmpty else {
-            feedbackView.show(message: "Date of birth is required.", type: .error); return
-        }
-        guard let insurance = insuranceField.text, !insurance.isEmpty else {
-            feedbackView.show(message: "Insurance ID is required.", type: .error); return
-        }
-        guard let policy = policyField.text, !policy.isEmpty else {
-            feedbackView.show(message: "Policy number is required.", type: .error); return
-        }
-
-        createBtn.setLoading(true); feedbackView.hide()
-        let newUser = User(
-            name: name, email: email, phone: phone, dateOfBirth: dob,
-            gender: genderRadio.selectedValue,
-            insuranceId: insurance, policyNumber: policy,
-            tpaCode: tpaCodeField.text,
-            payerName: payerNameField.text,
-            nationalityNumber: nationalityField.text,
-            height: Double(heightField.text ?? ""),
-            weight: Double(weightField.text ?? ""),
-            bloodType: bloodTypeRadio.selectedValue.isEmpty ? nil : bloodTypeRadio.selectedValue,
-            smoker: smokerRadio.selectedValue,
-            alcoholic: alcoholicRadio.selectedValue,
-            maritalStatus: maritalRadio.selectedValue,
-            relationType: relationRadio.selectedValue
-        )
-        ApiService.createUser(userData: newUser) { [weak self] user, _, _ in
-            DispatchQueue.main.async {
-                self?.createBtn.setLoading(false)
-                if let user = user {
-                    self?.feedbackView.show(message: "User created successfully! ID: \(user.id ?? 0)", type: .success)
-                    self?.clearForm()
-                } else {
-                    self?.feedbackView.show(message: "Failed to create user. Check your information.", type: .error)
-                }
-            }
-        }
-    }
-
-    private func clearForm() {
-        for field in [nameField, dobField, emailField, phoneField, nationalityField, insuranceField, policyField, tpaCodeField, payerNameField, heightField, weightField] {
-            field.text = ""
-        }
-        selectedDate = Date()
     }
 
     // MARK: - Keyboard

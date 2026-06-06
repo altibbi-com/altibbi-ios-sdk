@@ -1,190 +1,106 @@
-//
-//  UserVC.swift
-//  AltibbiTelehealth_Example
-//
-//  Created by Mahmoud Johar on 24/12/2023.
-//  Copyright © 2023 CocoaPods. All rights reserved.
-//
-
 import UIKit
 import AltibbiTelehealth
 
 class UserVC: UIViewController {
-    
-    @IBOutlet weak var userIdGetField: UITextField!
-    @IBOutlet weak var userIdDeleteField: UITextField!
-    @IBOutlet weak var nameEditField: UITextField!
-    @IBOutlet weak var emailEditField: UITextField!
-    @IBOutlet weak var heightEditField: UITextField!
-    @IBOutlet weak var idEditField: UITextField!
-    
+
+    private let scrollView  = UIScrollView()
+    private let contentView = UIView()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    public func showAlert(title: String, message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default) { (_) in
-        }
-        alertController.addAction(okAction)
-        present(alertController, animated: true, completion: nil)
-    }
-    
-    @IBAction func getUserByIdClicked(_ sender: Any) {
-        if let userId = userIdGetField.text {
-            if userId.count == 0 {
-                userIdGetField.layer.borderColor = UIColor.red.cgColor
-                userIdGetField.layer.borderWidth = 1.0
-                userIdGetField.layer.cornerRadius = 5.0
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    self.userIdGetField.layer.borderColor = UIColor.black.cgColor
-                    self.userIdGetField.layer.borderWidth = 0
-                }
-                return
-            }
-            print("Getting Info For User ID: \(userId)")
-            if let intId = Int(userId) {
-                print("Int ID: \(intId)")
-                ApiService.getUser(id: intId, completion: {user, failure, error in
-                    if let error = error {
-                        print("Data Error: \(String(describing: error))")
-                    } else if let failure = failure {
-                        ResponseFailure.printJsonData(failure)
-                    } else {
-                        if let user = user {
-                            print("Data Response: \(String(describing: user))")
-                            DispatchQueue.main.async {
-                                self.performSegue(withIdentifier: "userInfoSegue", sender: user)
-                            }
-                        }
-                    }
-                })
-            } else {
-                showAlert(title: "Invalid ID", message: "Please Insert a Valid ID")
-                print("Not Valid ID")
-            }
-        }
-    }
-    
-    @IBAction func showUsersListClicked(_ sender: Any) {
-        ApiService.getUsers(page: 1, perPage: 20, completion: {users, failure, error in
-            if let error = error {
-                print("Data Error: \(String(describing: error))")
-            } else if let failure = failure {
-                ResponseFailure.printJsonData(failure)
-            } else {
-                if let users = users {
-                    print("Data Response: \(String(describing: users))")
-                    for user in users {
-                        print("User: \(String(describing: user.id)), Name: \(String(describing: user.name))")
-                    }
-                }
-            }
-        })
-    }
-    
-    @IBAction func deleteUserClicked(_ sender: Any) {
-        if let userId = userIdDeleteField.text {
-            if userId.count == 0 {
-                userIdDeleteField.layer.borderColor = UIColor.red.cgColor
-                userIdDeleteField.layer.borderWidth = 1.0
-                userIdDeleteField.layer.cornerRadius = 5.0
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    self.userIdDeleteField.layer.borderColor = UIColor.black.cgColor
-                    self.userIdDeleteField.layer.borderWidth = 0
-                }
-                return
-            }
-            print("Deleting User With ID: \(userId)")
-            if let intId = Int(userId) {
-                print("Int ID: \(intId)")
-                ApiService.deleteUser(id: intId, completion: {data, failure, error in
-                    if let error = error {
-                        print("Data Error: \(String(describing: error))")
-                    } else if let failure = failure {
-                        ResponseFailure.printJsonData(failure)
-                    } else {
-                        DispatchQueue.main.async {
-                            self.showAlert(title: "Delete User", message: "Deleted Successfuly")
-                        }
-                        print("Result of deleting User \(intId) : \(String(describing: data))")
-                    }
-                })
-            } else {
-                showAlert(title: "Invalid ID", message: "Please Insert a Valid ID")
-                print("Not Valid ID")
-            }
-        }
-    }
-    
-    @IBAction func updateUserClicked(_ sender: Any) {
-        if let userId = idEditField.text, let name = nameEditField.text, let email = emailEditField.text, let height = heightEditField.text {
-            if userId.count == 0 {
-                idEditField.layer.borderColor = UIColor.red.cgColor
-                idEditField.layer.borderWidth = 1.0
-                idEditField.layer.cornerRadius = 5.0
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    self.idEditField.layer.borderColor = UIColor.black.cgColor
-                    self.idEditField.layer.borderWidth = 0
-                }
-                return
-            }
-            if name.count == 0 && email.count == 0 && height.count == 0 {
-                self.showAlert(title: "Name/Email/Height", message: "Please Fill One Field At Least")
-                return
-            }
-            if let intId = Int(userId) {
-                print("Int ID: \(intId)")
-                var newUser = User(id: intId);
-                if name.count > 0 {
-                    newUser.name = name
-                }
-                if email.count > 0 {
-                    newUser.email = email
-                }
-                if height.count > 0 {
-                    if let doubleHeight = Double(height) {
-                        newUser.height = doubleHeight
-                    } else {
-                        DispatchQueue.main.async {
-                            self.showAlert(title: "Height" , message: "Please Insert a Valid Value For Height")
-                            return
-                        }
-                    }
-                }
-                ApiService.updateUser(id: intId, userData: newUser, completion: {updatedUser, failure, error in
-                    if let error = error {
-                        print("Data Error: \(String(describing: error))")
-                    } else if let failure = failure {
-                        ResponseFailure.printJsonData(failure)
-                    } else {
-                        if let user = updatedUser {
-                            DispatchQueue.main.async {
-                                self.performSegue(withIdentifier: "userInfoSegue", sender: user)
-                            }
-                        }
-                    }
-                })
-            } else {
-                showAlert(title: "Invalid ID", message: "Please Insert a Valid ID")
-            }
-        }
-    }
-    
-    @IBAction func createUserClicked(_ sender: Any) {
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "userCreationSegue", sender: nil)
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "userInfoSegue" {
-            if let destVc = segue.destination as? UserInfoVC {
-                if let data = sender as? User {
-                    destVc.receivedData = data
-                }
-            }
-        }
+        title = "User Management"
+        view.backgroundColor = AppColors.background
+        setupScrollView()
+        setupContent()
     }
 
+    private func setupScrollView() {
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.alwaysBounceVertical = true
+        view.addSubview(scrollView)
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+        ])
+    }
+
+    private func setupContent() {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.spacing = AppLayout.spacing
+        contentView.addSubview(stack)
+        NSLayoutConstraint.activate([
+            stack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: AppLayout.padding),
+            stack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: AppLayout.padding),
+            stack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -AppLayout.padding),
+            stack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -AppLayout.padding),
+        ])
+
+        stack.addArrangedSubview(buildCard(
+            title: "User Management",
+            buttons: [
+                ("Create User",                AppButtonVariant.primary,   #selector(goCreateUser)),
+                ("Update User",                .secondary,                 #selector(goUpdateUser)),
+                ("Get / Delete / List Users",  .secondary,                 #selector(goUserTools)),
+            ]
+        ))
+    }
+
+    private func buildCard(title: String, buttons: [(String, AppButtonVariant, Selector)]) -> UIView {
+        let card = AppCardView()
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.spacing = AppLayout.spacing
+        card.addSubview(stack)
+
+        let titleLbl = UILabel()
+        titleLbl.text = title
+        titleLbl.font = .systemFont(ofSize: 18, weight: .bold)
+        titleLbl.textColor = AppColors.text
+        stack.addArrangedSubview(titleLbl)
+
+        let divider = UIView()
+        divider.backgroundColor = AppColors.lightGray
+        divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        stack.addArrangedSubview(divider)
+
+        for (label, variant, sel) in buttons {
+            let btn = AppButton(title: label, variant: variant)
+            btn.addTarget(self, action: sel, for: .touchUpInside)
+            stack.addArrangedSubview(btn)
+        }
+
+        NSLayoutConstraint.activate([
+            stack.topAnchor.constraint(equalTo: card.topAnchor, constant: AppLayout.cardPadding),
+            stack.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: AppLayout.cardPadding),
+            stack.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -AppLayout.cardPadding),
+            stack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -AppLayout.cardPadding),
+        ])
+        return card
+    }
+
+    // MARK: - Navigation
+
+    @objc private func goCreateUser() {
+        navigationController?.pushViewController(CreateUserVC(), animated: true)
+    }
+
+    @objc private func goUpdateUser() {
+        navigationController?.pushViewController(UpdateUserVC(), animated: true)
+    }
+
+    @objc private func goUserTools() {
+        navigationController?.pushViewController(UserToolsVC(), animated: true)
+    }
 }

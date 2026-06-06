@@ -26,6 +26,10 @@
 	<string>Camera permission needed</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>MIC permission needed</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photo library permission needed to attach images</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Save photos taken from camera</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
