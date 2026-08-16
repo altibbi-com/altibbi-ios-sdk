@@ -127,6 +127,14 @@ public class Consultation: Codable {
     }
 }
 
+public struct ConsultationAttachments: Decodable {
+    private(set) public var mediaIds: [String]?
+
+    private enum CodingKeys: String, CodingKey {
+        case mediaIds = "media_ids"
+    }
+}
+
 public struct CancelledConsultation: Decodable {
     private(set) public var status: String?
     private(set) public var consultationId: Int?

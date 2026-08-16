@@ -165,6 +165,9 @@ class ConsultationDetailVC: UIViewController {
     private let contentView = UIView()
     private var consultation: Consultation
 
+    private let attachBtn      = AppButton(title: "Attach Media", variant: .secondary)
+    private let attachFeedback = FeedbackView()
+
     init(consultation: Consultation) {
         self.consultation = consultation
         super.init(nibName: nil, bundle: nil)
@@ -176,6 +179,7 @@ class ConsultationDetailVC: UIViewController {
         title = "Consultation Details"
         view.backgroundColor = AppColors.background
         setupScrollView()
+        attachBtn.addTarget(self, action: #selector(pickAttachment), for: .touchUpInside)
         buildContent()
     }
 
@@ -251,10 +255,81 @@ class ConsultationDetailVC: UIViewController {
             ]))
         }
 
+        outerStack.addArrangedSubview(buildAttachmentsCard())
+
         // Recommendation
         if let rec = c.recommendation?.data {
             outerStack.addArrangedSubview(buildRecommendationCard(rec))
         }
+    }
+
+    private func rebuildContent() {
+        contentView.subviews.forEach { $0.removeFromSuperview() }
+        buildContent()
+    }
+
+    private func buildAttachmentsCard() -> UIView {
+        let card = AppCardView()
+        let stack = vstack(); card.addSubview(stack); pin(stack, to: card)
+        let titleLbl = SectionTitleLabel("Attachments")
+        titleLbl.textColor = AppColors.primary
+        stack.addArrangedSubview(titleLbl)
+        stack.addArrangedSubview(SectionDivider())
+
+        let media = consultation.media ?? []
+        if media.isEmpty {
+            stack.addArrangedSubview(detailRow(label: "Media", value: "None"))
+        } else {
+            for m in media {
+                stack.addArrangedSubview(detailRow(label: m.id ?? "-", value: m.name ?? m.ext ?? "-"))
+            }
+        }
+
+        stack.addArrangedSubview(attachFeedback)
+        stack.addArrangedSubview(attachBtn)
+        return card
+    }
+
+    @objc private func pickAttachment() {
+        guard consultation.consultationId != nil else {
+            attachFeedback.show(message: "Consultation ID missing.", type: .error); return
+        }
+        let picker = UIImagePickerController()
+        picker.delegate = self; picker.sourceType = .photoLibrary
+        present(picker, animated: true)
+    }
+
+    private func attachMedia(id mediaId: String) {
+        guard let consultationId = consultation.consultationId else { return }
+        ApiService.uploadConsultationAttachments(id: consultationId, mediaIds: [mediaId]) { [weak self] attachments, failure, error in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                if attachments != nil {
+                    self.reloadConsultation(message: "Attachment uploaded.")
+                } else {
+                    self.attachBtn.setLoading(false)
+                    self.attachFeedback.show(message: self.errorMessage(failure, error), type: .error)
+                }
+            }
+        }
+    }
+
+    private func reloadConsultation(message: String) {
+        guard let consultationId = consultation.consultationId else { return }
+        ApiService.getConsultationInfo(id: consultationId) { [weak self] updated, _, _ in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                self.attachBtn.setLoading(false)
+                if let updated { self.consultation = updated }
+                self.rebuildContent()
+                self.attachFeedback.show(message: message, type: .success)
+            }
+        }
+    }
+
+    private func errorMessage(_ failure: Data?, _ error: Error?) -> String {
+        if let failure, let body = String(data: failure, encoding: .utf8) { return body }
+        return error?.localizedDescription ?? "Failed to attach media."
     }
 
     private func infoCard(title: String, rows: [(String, String)]) -> UIView {
@@ -429,6 +504,28 @@ class ConsultationDetailVC: UIViewController {
             stack.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -AppLayout.cardPadding),
             stack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -AppLayout.cardPadding),
         ])
+    }
+}
+
+extension ConsultationDetailVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        picker.dismiss(animated: true)
+        guard let image = info[.originalImage] as? UIImage,
+              let data = image.jpegData(compressionQuality: 0.7) else { return }
+
+        attachFeedback.hide()
+        attachBtn.setLoading(true)
+        ApiService.uploadMedia(jsonFile: data, type: "jpg") { [weak self] media, failure, error in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                if let mediaId = media?.id {
+                    self.attachMedia(id: mediaId)
+                } else {
+                    self.attachBtn.setLoading(false)
+                    self.attachFeedback.show(message: self.errorMessage(failure, error), type: .error)
+                }
+            }
+        }
     }
 }
 

@@ -95,6 +95,26 @@ public struct ApiService {
         }
     }
 
+    public static func uploadConsultationAttachments(id: Int, mediaIds: [String], completion: @escaping (ConsultationAttachments?, Data?, Error?) -> Void) -> Void {
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: ["media_ids": mediaIds], options: [])
+            if let httpRequest = NetworkRequest.prepareRequest(
+                link: "/consultations/\(id)/upload-attachments",
+                method: "POST",
+                params: [:],
+                jsonBody: jsonData
+            ) {
+                NetworkRequest.sendApiRequest(httpRequest, expectedType: ConsultationAttachments.self, completion: {attachments, failure, error in
+                    completion(attachments, failure, error)
+                })
+            } else {
+                completion(nil, nil, nil)
+            }
+        } catch {
+            completion(nil, nil, error)
+        }
+    }
+
     public static func deleteConsultation(id: Int, completion: @escaping (String?, Data?, Error?) -> Void) -> Void {
         if let httpRequest = NetworkRequest.prepareRequest(
             link: "/consultations/\(id)",

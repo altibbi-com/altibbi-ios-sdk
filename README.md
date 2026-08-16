@@ -138,6 +138,7 @@ Create and manage consultations using our suite of functions:
 |---------------------|-------------------------------------|
 | createConsultation  | consultation                        |
 | uploadMedia         | jsonFile, type                      |
+| uploadConsultationAttachments | id, mediaIds              |
 | getConsultationInfo | id                                  |
 | getConsultationAvailableShifts | id, date (YYYY-MM-DD)      |
 | getLastConsultation |                                     |
@@ -167,6 +168,16 @@ import AltibbiTelehealth
 
 ApiService.uploadMedia(jsonFile: data, type: type, completion: {media, failure, error in
     // Handle media as a Media object and add the id to the consultation mediaIds array
+})
+```
+
+#### uploadConsultationAttachments
+Attach media to a consultation that already exists. Upload the files first with `uploadMedia`, then pass the returned ids.
+```sh
+import AltibbiTelehealth
+
+ApiService.uploadConsultationAttachments(id: consultationId, mediaIds: [mediaId], completion: {attachments, failure, error in
+    // attachments?.mediaIds holds the ids now attached to the consultation
 })
 ```
 
